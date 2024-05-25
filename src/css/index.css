@@ -1,0 +1,32 @@
+:root {
+    --header-bg-color: #f2f3f5;
+    --green-color: rgb(7, 222, 7);
+}
+
+body {
+   display: grid;
+}
+
+header {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--header-bg-color);
+    gap: 5px;
+    border-bottom: 3px solid green;
+}
+
+.check-logo {
+    width: 50px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.green-letters {
+    color: var(--green-color);
+}
