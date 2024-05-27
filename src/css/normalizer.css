@@ -25,3 +25,6 @@
   #root, #__next {
     isolation: isolate;
   }
+  ul {
+    list-style-type: none;
+  }

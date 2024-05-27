@@ -1,14 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
 </head>
+
 <body>
   <header>
+    <img class="check-logo" src="" alt="">
     <h1>What<span class="green-letters">ToDo</span></h1>
   </header>
- dsdfddf
+  <nav>
+    <ul>
+      <h2>Home</h2>
+      <li>
+        <img class="all-tasks_img" src="" alt="">
+        <p>All Tasks</p>
+      </li>
+      <li>
+        <img class="today_img" src="" alt="">
+        <p>Today</p>
+      </li>
+      <li>
+        <img class="next-7-days_img" src="" alt="">
+        <p>Next 7 Days</p>
+      </li>
+      <li>
+        <img class="important_img" src="" alt="">
+        <p>Important</p>
+      </li>
+    </ul>
+    <ul id="projects_ul">
+      <h2>Projects</h2>
+      <form id="project-form" action="">
+        <img class="density-icon" src="" alt="">
+        <div class="input_container">
+          <input type="text" id="project_input" placeholder="Enter Project Name">
+          <div class="form_buttons">
+            <button type="submit" class="submit_btn" value="add">Add</button>
+            <button type="button" class="cancel_btn" value="cancel">Cancel</button>
+          </div>
+        </div>
+      </form>
+      <button id="add-project">
+        <img class="add-project_icon" src="" alt="">
+        Add Project
+      </button>
+    </ul>
+  </nav>
+  <main>
+    <div id="main-title_container">
+      <h2 id="main-title">Default Text</h2>
+    </div>
+  </main>
 </body>
+
 </html>

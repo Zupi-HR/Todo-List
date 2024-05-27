@@ -1,12 +1,21 @@
 :root {
     --header-bg-color: #f2f3f5;
     --green-color: rgb(7, 222, 7);
+    --red-color: rgb(249, 10, 10);
+    --main-background-color: #ececec;
+}
+html, body {
+    height: 100%;
 }
 
 body {
-   display: grid;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 7fr;
+    height: 100%;
 }
 
+/* header */
 header {
     display: flex;
     text-align: center;
@@ -16,11 +25,15 @@ header {
     background-color: var(--header-bg-color);
     gap: 5px;
     border-bottom: 3px solid green;
+    grid-column-start: 1;
+    grid-column-end: -1;
 }
 
 .check-logo {
     width: 50px;
 }
+
+/* navigation */
 
 h1 {
     font-size: 2.5rem;
@@ -29,4 +42,118 @@ h1 {
 
 .green-letters {
     color: var(--green-color);
+}
+
+nav {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    row-gap: 10px;
+}
+
+nav ul h2 {
+    align-self: flex-start;
+    position: relative;
+    right: 30px;
+    border-bottom: 2px solid black;
+    width: 100%;
+}
+
+nav ul li {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+nav ul li img {
+    width: 27px;
+}
+
+#projects_ul {
+   gap: 30px;
+}
+
+#project-form {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.density-icon {
+    display: inline-block;
+     margin-top: 5px;
+}
+
+.input_container {
+    width: 80%;
+}
+
+input[type=text] {
+    padding: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    width: 100%;
+}
+
+.form_buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+
+.submit_btn, .cancel_btn {
+    padding: 5px;
+    width: 70px;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border: none;
+    font-weight: bold;
+}
+ 
+.submit_btn {
+ background-color: var(--green-color);
+}
+
+.cancel_btn {
+    background-color: var(--red-color);
+}
+
+/* add project */
+#add-project {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+   background-color: transparent;
+   border: none;
+}
+
+/* main */
+main {
+    grid-column-start: 2;
+    grid-column-end: -1;
+    padding: 30px 50px;
+    background-color: var(--main-background-color);
+}
+
+#main-title_container {
+    background-color: var(--green-color);
+}
+
+#main-title {
+    color: white;
+    padding: 20px;
 }

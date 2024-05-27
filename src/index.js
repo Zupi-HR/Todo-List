@@ -1,11 +1,4 @@
 import './css/index.css';
 import './css/normalizer.css';
-import check_logo from './assets/check_logo.png';
+import { image1, image2, image3, image4, image5, addCircleIMG} from './exportImages';
 
-
-const header = document.querySelector('header');
-
-const checkLogoIMG = document.createElement('img');
-checkLogoIMG.classList.add('check-logo');
-checkLogoIMG.src = check_logo;
-header.prepend(checkLogoIMG);
