@@ -1,7 +1,8 @@
-import createTodos from "./TodoProjectCreator";
+//import createTodos from "./TodoProjectCreator";
 import todosItemIcon from "./assets/materials_icon.svg"
 import editIconElementImage from "./assets/edit_icon.svg";
-import { RenameProject, DeleteProject, GetProjects } from "./TodoProjectCreator";
+//import { RenameProject, DeleteProject, GetProjects } from "./TodoProjectCreator";
+import { todoManager } from "./TodoProjectCreator";
 
 // DOM Element Selections
 const projectFormElement = document.getElementById('project-form');
@@ -55,18 +56,31 @@ function createAndAppendOptionsMenu(todoDivElement) {
 }
 
 function handleDeleteClick(deleteButtonElement) {
-  deleteButtonElement.addEventListener('click', (event) => {
-    const clickedDeleteButton = event.currentTarget;
-    clickedDeleteButton.parentNode.parentNode.remove();
-    console.log(clickedDeleteButton.parentNode.parentNode.getAttribute('data-project'));
-    DeleteProject.delete(clickedDeleteButton.parentNode.parentNode.getAttribute('data-project'));
-  })
+    deleteButtonElement.addEventListener('click', (event) => {
+        const clickedDeleteButton = event.currentTarget;
+        const projectId = clickedDeleteButton.parentNode.parentNode.getAttribute('data-project');
+        todoManager.deleteTodoById(projectId);
+        console.log(projectId);
+        clickedDeleteButton.parentNode.parentNode.remove();
+        updateTodoListElements();
+    })
 }
+
+
+function updateTodoListElements() {
+    const todosArray = todoManager.getTodos();
+    const todoElements = document.querySelectorAll('.todos-item');
+    console.log(todoElements);
+    for (let index = 0; index < todosArray.length; index++) {
+        todoElements[index].setAttribute("data-project", todosArray[index].id);
+    }
+}
+
 
 
 function handleFormSubmission() {
     todosListElement.innerHTML = "";
-    const todosItemsArray = createTodos(projectInputField.value);
+    const todosItemsArray = todoManager.createTodo(projectInputField.value);
     todosItemsArray.forEach((todoItem) => {
         todosListElement.appendChild(createTodoItemElement(todoItem));
     })
