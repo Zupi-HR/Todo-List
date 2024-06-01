@@ -34,6 +34,10 @@ body {
     display: block;
 }
 
+.close {
+    display: none !important;
+}
+
 
 /* header */
 header {

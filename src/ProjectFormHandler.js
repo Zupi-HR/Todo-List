@@ -1,62 +1,82 @@
 import createTodos from "./TodoProjectCreator";
 import todosItemIcon from "./assets/materials_icon.svg"
-import editIMG from "./assets/edit_icon.svg";
+import editIconElementImage from "./assets/edit_icon.svg";
+import { RenameProject, DeleteProject, GetProjects } from "./TodoProjectCreator";
 
-const projectForm = document.getElementById('project-form');
+// DOM Element Selections
+const projectFormElement = document.getElementById('project-form');
+const projectsListElement = document.getElementById('projects_ul');
+const todosListElement = document.getElementById('todos-list');
+const projectInputField = document.getElementById('project_input');
 
-const submitBtn = document.querySelector('submit_btn');
-const projectsUl = document.getElementById('projects_ul');
-const todosList = document.getElementById('todos-list');
-const projectInput = document.getElementById('project_input');
 
-function renderProjectForm() {
-    projectForm.classList.remove('hidden');
+function showProjectForm() {
+    projectFormElement.classList.remove('hidden');
 }
 
-function submitForm() {
-    todosList.innerHTML = "";
-    const todosItems = createTodos(projectInput.value);
-    todosItems.forEach((item) => {
-        const div = document.createElement('div');
-        div.setAttribute("data-project", item.id);
-        div.classList.add('todos-item');
-        todosList.appendChild(div);
 
-        const materialIcon = document.createElement('img');
-        materialIcon.src = todosItemIcon;
+function createTodoItemElement(item) {
+    const todoDivElement = document.createElement('div');
+    todoDivElement.setAttribute("data-project", item.id);
+    todoDivElement.classList.add('todos-item');
 
-        const projectName = document.createElement('p');
-        projectName.textContent = item.name;
+    const iconElement = document.createElement('img');
+    iconElement.src = todosItemIcon;
 
-        const editIcon = document.createElement('img');
-        editIcon.style.display = "inline-block";
-        editIcon.style.marginLeft = "auto";
-        editIcon.src = editIMG;
+    const projectNameElement = document.createElement('p');
+    projectNameElement.textContent = item.name;
 
-        editIcon.addEventListener("click", function () {
-            const optionMenu = document.createElement('div');
-            optionMenu.classList.add("project-option");
-
-            const renameProject = document.createElement('p');
-            renameProject.id = "rename-project";
-            renameProject.textContent = "Rename";
-
-            const deleteProject = document.createElement("p");
-            deleteProject.id = "delete-project";
-            deleteProject.textContent = "Delete";
-
-            optionMenu.append(renameProject, deleteProject);
-
-            div.appendChild(optionMenu);
-
-        })
-
-        div.append(materialIcon, projectName, editIcon);
-
-
+    const editIconElement = document.createElement('img');
+    editIconElement.style.display = "inline-block";
+    editIconElement.style.marginLeft = "auto";
+    editIconElement.src = editIconElementImage;
+    editIconElement.addEventListener('click', () => {
+        createAndAppendOptionsMenu(todoDivElement);
     })
-    projectForm.classList.add('hidden');
-    console.log(todosItems);
+
+    todoDivElement.append(iconElement, projectNameElement, editIconElement);
+    return todoDivElement;
 }
 
-export { renderProjectForm, submitForm };
+function createAndAppendOptionsMenu(todoDivElement) {
+    const optionMenu = document.createElement('div');
+    optionMenu.classList.add("project-option");
+
+    const renameProject = document.createElement('p');
+    renameProject.id = "rename-project";
+    renameProject.textContent = "Rename";
+
+    const deleteProject = document.createElement("p");
+    deleteProject.id = "delete-project";
+    deleteProject.textContent = "Delete";
+    optionMenu.append(renameProject, deleteProject);
+    todoDivElement.appendChild(optionMenu);
+    handleDeleteClick(deleteProject);
+}
+
+function handleDeleteClick(deleteButtonElement) {
+  deleteButtonElement.addEventListener('click', (event) => {
+    const clickedDeleteButton = event.currentTarget;
+    clickedDeleteButton.parentNode.parentNode.remove();
+    console.log(clickedDeleteButton.parentNode.parentNode.getAttribute('data-project'));
+    DeleteProject.delete(clickedDeleteButton.parentNode.parentNode.getAttribute('data-project'));
+  })
+}
+
+
+function handleFormSubmission() {
+    todosListElement.innerHTML = "";
+    const todosItemsArray = createTodos(projectInputField.value);
+    todosItemsArray.forEach((todoItem) => {
+        todosListElement.appendChild(createTodoItemElement(todoItem));
+    })
+    projectInputField.value = "";
+    projectFormElement.classList.add('hidden');
+}
+
+
+
+
+
+
+export { showProjectForm, handleFormSubmission };
