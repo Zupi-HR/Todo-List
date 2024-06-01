@@ -29,4 +29,5 @@ const addProjectIcon = document.querySelector('.add-project_icon');
 addProjectIcon.src = addCircleIMG;
 
 
+
 export {image1, image2, image3, image4, image5, addCircleIMG, densityIMG};

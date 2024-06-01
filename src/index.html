@@ -13,28 +13,30 @@
     <h1>What<span class="green-letters">ToDo</span></h1>
   </header>
   <nav>
-    <ul>
+    <ul id="home_ul">
       <h2>Home</h2>
-      <li>
+      <li id="all-tasks">
         <img class="all-tasks_img" src="" alt="">
-        <p>All Tasks</p>
+        All Tasks
       </li>
-      <li>
+      <li id="today">
         <img class="today_img" src="" alt="">
-        <p>Today</p>
+        Today
       </li>
-      <li>
+      <li id="next-7-days">
         <img class="next-7-days_img" src="" alt="">
-        <p>Next 7 Days</p>
+        Next 7 Days
       </li>
-      <li>
+      <li id="important">
         <img class="important_img" src="" alt="">
-        <p>Important</p>
+        Important
       </li>
     </ul>
     <ul id="projects_ul">
       <h2>Projects</h2>
-      <form id="project-form" action="">
+      <ul id="todos-list"></ul>
+    </ul>
+      <form id="project-form" class="hidden" action="">
         <img class="density-icon" src="" alt="">
         <div class="input_container">
           <input type="text" id="project_input" placeholder="Enter Project Name">
@@ -48,12 +50,15 @@
         <img class="add-project_icon" src="" alt="">
         Add Project
       </button>
-    </ul>
+    
   </nav>
   <main>
     <div id="main-title_container">
       <h2 id="main-title">Default Text</h2>
     </div>
+    <ul id="todo-list">
+
+    </ul>
   </main>
 </body>
 
