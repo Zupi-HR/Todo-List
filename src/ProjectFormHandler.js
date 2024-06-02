@@ -10,6 +10,8 @@ const projectsListElement = document.getElementById('projects_ul');
 const todosListElement = document.getElementById('todos-list');
 const projectInputField = document.getElementById('project_input');
 
+let isOptionsMenuOpen = false;
+
 
 function showProjectForm() {
     projectFormElement.classList.remove('hidden');
@@ -31,8 +33,13 @@ function createTodoItemElement(item) {
     editIconElement.style.display = "inline-block";
     editIconElement.style.marginLeft = "auto";
     editIconElement.src = editIconElementImage;
-    editIconElement.addEventListener('click', () => {
+    editIconElement.addEventListener('click', (event) => {
+        event.stopPropagation();
         createAndAppendOptionsMenu(todoDivElement);
+        if (!isOptionsMenuOpen) {
+            document.querySelector('body').addEventListener('click', closeOptionsMenu);
+            isOptionsMenuOpen = true;    
+        }
     })
 
     todoDivElement.append(iconElement, projectNameElement, editIconElement);
@@ -55,8 +62,20 @@ function createAndAppendOptionsMenu(todoDivElement) {
     handleDeleteClick(deleteProject);
 }
 
+function closeOptionsMenu() {
+        document.querySelectorAll('.project-option').forEach((element) => {
+            element.remove();
+        })
+        document.querySelector('body').removeEventListener('click', closeOptionsMenu)
+        isOptionsMenuOpen = false;
+}
+
+
 function handleDeleteClick(deleteButtonElement) {
     deleteButtonElement.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
         const clickedDeleteButton = event.currentTarget;
         const projectId = clickedDeleteButton.parentNode.parentNode.getAttribute('data-project');
         todoManager.deleteTodoById(projectId);
