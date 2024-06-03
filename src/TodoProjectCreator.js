@@ -51,7 +51,8 @@ class TodoManager {
 
     renameTodoById(id, newName) {
         if (this.todos[id]) {
-            this.todos[id] = newName;
+            this.todos[id].name = newName;
+            console.log(this.todos[id].name);
         } else {
             console.error(`Todo with ID: ${id} not found`);
         }

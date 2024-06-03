@@ -9,6 +9,9 @@ const projectFormElement = document.getElementById('project-form');
 const projectsListElement = document.getElementById('projects_ul');
 const todosListElement = document.getElementById('todos-list');
 const projectInputField = document.getElementById('project_input');
+const submitBTN = document.querySelector('.submit_btn');
+const cancelBTN = document.querySelector('.cancel_btn');
+
 
 let isOptionsMenuOpen = false;
 
@@ -16,6 +19,21 @@ let isOptionsMenuOpen = false;
 function showProjectForm() {
     projectFormElement.classList.remove('hidden');
 }
+
+function hideProjectForm() {
+    projectFormElement.classList.add('hidden');
+}
+
+submitBTN.addEventListener('click', (event) => {
+    event.preventDefault();
+    handleFormSubmission();
+});
+
+cancelBTN.addEventListener('click', (event) => {
+    event.preventDefault();
+   handleFormCancel();
+})
+
 
 
 function createTodoItemElement(item) {
@@ -38,7 +56,7 @@ function createTodoItemElement(item) {
         createAndAppendOptionsMenu(todoDivElement);
         if (!isOptionsMenuOpen) {
             document.querySelector('body').addEventListener('click', closeOptionsMenu);
-            isOptionsMenuOpen = true;    
+            isOptionsMenuOpen = true;
         }
     })
 
@@ -53,6 +71,8 @@ function createAndAppendOptionsMenu(todoDivElement) {
     const renameProject = document.createElement('p');
     renameProject.id = "rename-project";
     renameProject.textContent = "Rename";
+    handleRenameClick(renameProject);
+
 
     const deleteProject = document.createElement("p");
     deleteProject.id = "delete-project";
@@ -63,13 +83,38 @@ function createAndAppendOptionsMenu(todoDivElement) {
 }
 
 function closeOptionsMenu() {
-        document.querySelectorAll('.project-option').forEach((element) => {
-            element.remove();
-        })
-        document.querySelector('body').removeEventListener('click', closeOptionsMenu)
-        isOptionsMenuOpen = false;
+    document.querySelectorAll('.project-option').forEach((element) => {
+        element.remove();
+    })
+    document.querySelector('body').removeEventListener('click', closeOptionsMenu)
+    isOptionsMenuOpen = false;
 }
 
+function handleRenameClick(renameButtonElement) {
+    renameButtonElement.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        const clickedRenameButton = event.currentTarget;
+        const projectId = clickedRenameButton.parentNode.parentNode.getAttribute('data-project');
+        showProjectForm();
+        projectInputField.value += clickedRenameButton.parentNode.parentNode.querySelector('p').innerText;
+        todoManager.renameTodoById(projectId, projectInputField.value);
+        updateTodoListElements();
+      confirmRenamedElement();
+    })
+}
+
+
+function confirmRenamedElement() {
+    
+        submitBTN.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+           
+        })
+}
 
 function handleDeleteClick(deleteButtonElement) {
     deleteButtonElement.addEventListener('click', (event) => {
@@ -81,12 +126,20 @@ function handleDeleteClick(deleteButtonElement) {
         todoManager.deleteTodoById(projectId);
         console.log(projectId);
         clickedDeleteButton.parentNode.parentNode.remove();
-        updateTodoListElements();
+        updateTodoListElementsIDs();
     })
 }
 
-
 function updateTodoListElements() {
+    todosListElement.innerHTML = "";
+    const todosItemsArray = todoManager.getTodos();
+    todosItemsArray.forEach(todoItem => {
+        todosListElement.appendChild(createTodoItemElement(todoItem));
+    });
+}
+
+
+function updateTodoListElementsIDs() {
     const todosArray = todoManager.getTodos();
     const todoElements = document.querySelectorAll('.todos-item');
     console.log(todoElements);
@@ -107,9 +160,12 @@ function handleFormSubmission() {
     projectFormElement.classList.add('hidden');
 }
 
+function handleFormCancel() {
+    projectInputField.value = "";
+    hideProjectForm();
+}
 
 
 
 
-
-export { showProjectForm, handleFormSubmission };
+export { showProjectForm, handleFormSubmission, handleFormCancel };
