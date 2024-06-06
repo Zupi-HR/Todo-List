@@ -5,7 +5,7 @@ import renderAllTasks from './AllTasks';
 import renderTodayTasks from './TodayTasks';
 import renderNext7DaysTasks from './Next7DaysTasks';
 import renderImportantTasks from './ImportantTasks';
-import {showProjectForm, handleFormSubmission, handleFormCancel} from './ProjectFormHandler';
+import {showProjectForm} from './ProjectFormHandler';
 
 
 const navItemsContainer = document.querySelector('ul');

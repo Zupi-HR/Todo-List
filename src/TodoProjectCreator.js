@@ -52,7 +52,7 @@ class TodoManager {
     renameTodoById(id, newName) {
         if (this.todos[id]) {
             this.todos[id].name = newName;
-            console.log(this.todos[id].name);
+            console.log(this.todos[id].name, "exist");
         } else {
             console.error(`Todo with ID: ${id} not found`);
         }

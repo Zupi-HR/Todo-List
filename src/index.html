@@ -33,24 +33,31 @@
       </li>
     </ul>
     <ul id="projects_ul">
+      <form id="rename-form" class="hidden" action="">
+        <input type="text" id="rename-input" name="rename-input" class="">
+        <div class="rename-buttons">
+          <button id="rename-submit-btn" class="submit_btn">Submit</button>
+          <button id="rename-cancel-btn" class="cancel_btn">Cancel</button>
+        </div>
+      </form>
       <h2>Projects</h2>
       <ul id="todos-list"></ul>
     </ul>
-      <form id="project-form" class="hidden" action="">
-        <img class="density-icon" src="" alt="">
-        <div class="input_container">
-          <input type="text" id="project_input" placeholder="Enter Project Name">
-          <div class="form_buttons">
-            <button type="submit" class="submit_btn" value="add">Add</button>
-            <button type="button" class="cancel_btn" value="cancel">Cancel</button>
-          </div>
+    <form id="project-form" class="hidden" action="">
+      <img class="density-icon" src="" alt="">
+      <div class="input_container">
+        <input type="text" id="project_input" placeholder="Enter Project Name">
+        <div class="form_buttons">
+          <button type="submit" id="submit-btn" class="submit_btn" value="add">Add</button>
+          <button type="button" id="cancel-btn" class="cancel_btn" value="cancel">Cancel</button>
         </div>
-      </form>
-      <button id="add-project">
-        <img class="add-project_icon" src="" alt="">
-        Add Project
-      </button>
-    
+      </div>
+    </form>
+    <button id="add-project">
+      <img class="add-project_icon" src="" alt="">
+      Add Project
+    </button>
+
   </nav>
   <main>
     <div id="main-title_container">

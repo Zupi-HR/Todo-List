@@ -116,6 +116,13 @@ nav ul li img {
    gap: 30px;
 }
 
+#rename-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
 #project-form {
     display: flex;
     align-items: flex-start;
@@ -200,6 +207,7 @@ input[type=text] {
     background-color: #ececec;
     cursor: pointer;
 }
+
 
 .project-option {
     display: flex;

@@ -1,85 +1,90 @@
-//import createTodos from "./TodoProjectCreator";
+
 import todosItemIcon from "./assets/materials_icon.svg"
-import editIconElementImage from "./assets/edit_icon.svg";
-//import { RenameProject, DeleteProject, GetProjects } from "./TodoProjectCreator";
+import editIconImage from "./assets/edit_icon.svg";
 import { todoManager } from "./TodoProjectCreator";
 
 // DOM Element Selections
-const projectFormElement = document.getElementById('project-form');
-const projectsListElement = document.getElementById('projects_ul');
-const todosListElement = document.getElementById('todos-list');
-const projectInputField = document.getElementById('project_input');
-const submitBTN = document.querySelector('.submit_btn');
-const cancelBTN = document.querySelector('.cancel_btn');
+const projectForm = document.getElementById('project-form');
+const projectList = document.getElementById('projects_ul');
+const todoList = document.getElementById('todos-list');
 
+const projectInput = document.getElementById('project_input');
+const submitButton = document.getElementById('submit-btn');
+const cancelButton = document.getElementById('cancel-btn');
 
+const renameForm = document.getElementById('rename-form');
+const renameProjectInput = document.getElementById('rename-input');
+const renameSubmitButton = document.getElementById('rename-submit-btn');
+const renameCancelButton = document.getElementById('rename-cancel-btn');
+
+//State variable to track if the options menu is open
 let isOptionsMenuOpen = false;
 
 
 function showProjectForm() {
-    projectFormElement.classList.remove('hidden');
+    projectForm.classList.remove('hidden');
 }
 
 function hideProjectForm() {
-    projectFormElement.classList.add('hidden');
+    projectInput.value = "";
+    projectForm.classList.add('hidden');
 }
 
-submitBTN.addEventListener('click', (event) => {
-    event.preventDefault();
-    handleFormSubmission();
-});
 
-cancelBTN.addEventListener('click', (event) => {
-    event.preventDefault();
-   handleFormCancel();
-})
+function showRenameProjectForm() {
+    renameForm.classList.remove('hidden');
+}
 
+function hideRenameProjectForm() {
+    renameForm.classList.add('hidden');
+}
 
 
+//Function to create a new todo item element
 function createTodoItemElement(item) {
-    const todoDivElement = document.createElement('div');
-    todoDivElement.setAttribute("data-project", item.id);
-    todoDivElement.classList.add('todos-item');
+    const todoItem = document.createElement('div');
+    todoItem.setAttribute("data-project", item.id);
+    todoItem.classList.add('todos-item');
 
-    const iconElement = document.createElement('img');
-    iconElement.src = todosItemIcon;
+    const todoIcon = document.createElement('img');
+    todoIcon.src = todosItemIcon;
 
-    const projectNameElement = document.createElement('p');
-    projectNameElement.textContent = item.name;
+    const todoName = document.createElement('p');
+    todoName.textContent = item.name;
 
-    const editIconElement = document.createElement('img');
-    editIconElement.style.display = "inline-block";
-    editIconElement.style.marginLeft = "auto";
-    editIconElement.src = editIconElementImage;
-    editIconElement.addEventListener('click', (event) => {
+    const editIcon = document.createElement('img');
+    editIcon.style.display = "inline-block";
+    editIcon.style.marginLeft = "auto";
+    editIcon.src = editIconImage;
+    editIcon.addEventListener('click', (event) => {
         event.stopPropagation();
-        createAndAppendOptionsMenu(todoDivElement);
+        createAndAppendOptionsMenu(todoItem);
         if (!isOptionsMenuOpen) {
             document.querySelector('body').addEventListener('click', closeOptionsMenu);
             isOptionsMenuOpen = true;
         }
     })
 
-    todoDivElement.append(iconElement, projectNameElement, editIconElement);
-    return todoDivElement;
+    todoItem.append(todoIcon, todoName, editIcon);
+    return todoItem;
 }
+//Function to create and append the options menu to a todo item element
+function createAndAppendOptionsMenu(todoItem) {
+    const optionsMenu = document.createElement('div');
+    optionsMenu.classList.add("project-option");
 
-function createAndAppendOptionsMenu(todoDivElement) {
-    const optionMenu = document.createElement('div');
-    optionMenu.classList.add("project-option");
-
-    const renameProject = document.createElement('p');
-    renameProject.id = "rename-project";
-    renameProject.textContent = "Rename";
-    handleRenameClick(renameProject);
+    const renameOption = document.createElement('p');
+    renameOption.id = "rename-project";
+    renameOption.textContent = "Rename";
+    handleRenameClick(renameOption);
 
 
-    const deleteProject = document.createElement("p");
-    deleteProject.id = "delete-project";
-    deleteProject.textContent = "Delete";
-    optionMenu.append(renameProject, deleteProject);
-    todoDivElement.appendChild(optionMenu);
-    handleDeleteClick(deleteProject);
+    const deleteOption = document.createElement("p");
+    deleteOption.id = "delete-project";
+    deleteOption.textContent = "Delete";
+    optionsMenu.append(renameOption, deleteOption);
+    todoItem.appendChild(optionsMenu);
+    handleDeleteClick(deleteOption);
 }
 
 function closeOptionsMenu() {
@@ -90,32 +95,58 @@ function closeOptionsMenu() {
     isOptionsMenuOpen = false;
 }
 
+//Function to handle the rename button click event
 function handleRenameClick(renameButtonElement) {
     renameButtonElement.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
+        showRenameProjectForm();
         const clickedRenameButton = event.currentTarget;
-        const projectId = clickedRenameButton.parentNode.parentNode.getAttribute('data-project');
-        showProjectForm();
-        projectInputField.value += clickedRenameButton.parentNode.parentNode.querySelector('p').innerText;
-        todoManager.renameTodoById(projectId, projectInputField.value);
-        updateTodoListElements();
-      confirmRenamedElement();
+        const todoItemSelected = clickedRenameButton.parentNode.parentNode;
+        console.log(clickedRenameButton);
+        const projectId = todoItemSelected.getAttribute('data-project');
+        const currentName = todoItemSelected.querySelector('p').textContent;
+        console.log("current name is: ", currentName);
+        renameProjectInput.value = currentName;
+        // projectInput.value += clickedRenameButton.parentNode.parentNode.querySelector('p').textContent;
+        console.log(renameSubmitButton);
+        console.log(todoItemSelected);
+        
+      // const replacedChild = todoList.replaceChild(renameForm, clickedRenameButton.parentNode.parentNode);
+        todoItemSelected.replaceWith(renameForm);
+       // console.log(replacedChild.querySelector('p').textContent);
+        renameSubmitButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            console.log(todoItemSelected);
+            const currentElementName = todoItemSelected.querySelector('p');
+            console.log("new name is: ", currentElementName);
+            currentElementName.innerText = renameProjectInput.value;
+            todoManager.renameTodoById(projectId, projectInput.value);
+           // todoList.appendChild(renameForm);
+           // const replacedRenameForm = todoList.replaceChild(todoItemSelected, renameForm);
+           renameForm.replaceWith(todoItemSelected);
+           // projectList.appendChild(replacedRenameForm);
+            hideRenameProjectForm();
+            
+        })
+         
+
+    })
+    confirmRenameSubmission();
+}
+
+//Function to handle the form submission for renaming
+function confirmRenameSubmission() {
+    submitButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        console.log('rename submit clicked');
     })
 }
 
-
-function confirmRenamedElement() {
-    
-        submitBTN.addEventListener("click", (event) => {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            event.stopPropagation();
-           
-        })
-}
-
+//Function to handle the delete button click event
 function handleDeleteClick(deleteButtonElement) {
     deleteButtonElement.addEventListener('click', (event) => {
         event.preventDefault();
@@ -126,20 +157,21 @@ function handleDeleteClick(deleteButtonElement) {
         todoManager.deleteTodoById(projectId);
         console.log(projectId);
         clickedDeleteButton.parentNode.parentNode.remove();
-        updateTodoListElementsIDs();
+        updateTodoListIDs();
     })
 }
 
-function updateTodoListElements() {
-    todosListElement.innerHTML = "";
-    const todosItemsArray = todoManager.getTodos();
-    todosItemsArray.forEach(todoItem => {
-        todosListElement.appendChild(createTodoItemElement(todoItem));
+//function to update the todo list elements
+function updateTodoList() {
+    todoList.innerHTML = "";
+    const todosArray = todoManager.getTodos();
+    todosArray.forEach(todoItem => {
+        todoList.appendChild(createTodoItemElement(todoItem));
     });
 }
 
-
-function updateTodoListElementsIDs() {
+//Function to update the IDs of the todo list elements
+function updateTodoListIDs() {
     const todosArray = todoManager.getTodos();
     const todoElements = document.querySelectorAll('.todos-item');
     console.log(todoElements);
@@ -148,24 +180,27 @@ function updateTodoListElementsIDs() {
     }
 }
 
+submitButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    handleFormSubmission();
+});
 
-
-function handleFormSubmission() {
-    todosListElement.innerHTML = "";
-    const todosItemsArray = todoManager.createTodo(projectInputField.value);
-    todosItemsArray.forEach((todoItem) => {
-        todosListElement.appendChild(createTodoItemElement(todoItem));
-    })
-    projectInputField.value = "";
-    projectFormElement.classList.add('hidden');
-}
-
-function handleFormCancel() {
-    projectInputField.value = "";
+cancelButton.addEventListener('click', (event) => {
+    event.preventDefault();
     hideProjectForm();
+})
+
+
+//Function to handle form submission
+function handleFormSubmission() {
+    todoList.innerHTML = "";
+    const todosArray = todoManager.createTodo(projectInput.value);
+    todosArray.forEach((todoItem) => {
+        todoList.appendChild(createTodoItemElement(todoItem));
+    })
+    projectInput.value = "";
+    projectForm.classList.add('hidden');
 }
 
 
-
-
-export { showProjectForm, handleFormSubmission, handleFormCancel };
+export { showProjectForm };
