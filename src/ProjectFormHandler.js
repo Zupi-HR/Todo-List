@@ -31,9 +31,36 @@ function hideProjectForm() {
 }
 
 
-function showRenameProjectForm() {
+function submitRenameHandler(todoItemSelected) {
     renameForm.classList.remove('hidden');
+    renameProjectInput.value = "";
+    todoList.insertBefore(renameForm, todoItemSelected);
+    todoItemSelected.classList.add('hidden');
+    const todoItemSelectedID = todoItemSelected.getAttribute('data-project');
+    const TodoContentElement = todoItemSelected.querySelector('p');
+    renameProjectInput.value = TodoContentElement.textContent;
+    function onRenameSubmit(event) {
+        event.preventDefault();
+        
+        todoManager.renameTodoById(todoItemSelectedID, renameProjectInput.value);
+        renameForm.classList.add('hidden');
+        projectList.prepend(renameForm);
+        todoItemSelected.classList.remove('hidden');
+        const arrayItems = todoManager.getTodos();
+        console.log(arrayItems.length);
+        arrayItems.forEach((item, index) => {
+            console.log(item.name);
+        });
+        updateTodoList();
+    }
+    renameSubmitButton.removeEventListener('click', onRenameSubmit);
+    renameSubmitButton.addEventListener('click', onRenameSubmit)
 }
+
+
+
+
+
 
 function hideRenameProjectForm() {
     renameForm.classList.add('hidden');
@@ -76,7 +103,6 @@ function createAndAppendOptionsMenu(todoItem) {
     const renameOption = document.createElement('p');
     renameOption.id = "rename-project";
     renameOption.textContent = "Rename";
-    handleRenameClick(renameOption);
 
 
     const deleteOption = document.createElement("p");
@@ -84,6 +110,7 @@ function createAndAppendOptionsMenu(todoItem) {
     deleteOption.textContent = "Delete";
     optionsMenu.append(renameOption, deleteOption);
     todoItem.appendChild(optionsMenu);
+    handleRenameClick(renameOption);
     handleDeleteClick(deleteOption);
 }
 
@@ -99,41 +126,16 @@ function closeOptionsMenu() {
 function handleRenameClick(renameButtonElement) {
     renameButtonElement.addEventListener('click', (event) => {
         event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        showRenameProjectForm();
-        const clickedRenameButton = event.currentTarget;
-        const todoItemSelected = clickedRenameButton.parentNode.parentNode;
-        console.log(clickedRenameButton);
-        const projectId = todoItemSelected.getAttribute('data-project');
-        const currentName = todoItemSelected.querySelector('p').textContent;
-        console.log("current name is: ", currentName);
-        renameProjectInput.value = currentName;
-        // projectInput.value += clickedRenameButton.parentNode.parentNode.querySelector('p').textContent;
-        console.log(renameSubmitButton);
+       // event.stopPropagation();
+       // event.stopImmediatePropagation();
+        const todoItemSelected = event.currentTarget.parentNode.parentNode;
         console.log(todoItemSelected);
-        
-      // const replacedChild = todoList.replaceChild(renameForm, clickedRenameButton.parentNode.parentNode);
-        todoItemSelected.replaceWith(renameForm);
-       // console.log(replacedChild.querySelector('p').textContent);
-        renameSubmitButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            console.log(todoItemSelected);
-            const currentElementName = todoItemSelected.querySelector('p');
-            console.log("new name is: ", currentElementName);
-            currentElementName.innerText = renameProjectInput.value;
-            todoManager.renameTodoById(projectId, projectInput.value);
-           // todoList.appendChild(renameForm);
-           // const replacedRenameForm = todoList.replaceChild(todoItemSelected, renameForm);
-           renameForm.replaceWith(todoItemSelected);
-           // projectList.appendChild(replacedRenameForm);
-            hideRenameProjectForm();
-            
-        })
-         
+        submitRenameHandler(todoItemSelected);
+        console.log("vbsdds");
+
 
     })
-    confirmRenameSubmission();
+    // confirmRenameSubmission();
 }
 
 //Function to handle the form submission for renaming
