@@ -1,11 +1,11 @@
 const mainTitle = document.getElementById('main-title');
-const todoList = document.getElementById('todo-list');
+const todoTask = document.getElementById('todo-task');
 const todayTasks = document.getElementById('today');
 
 function renderTodayTasks() {
     mainTitle.textContent = todayTasks.textContent;
-    if (todoList.textContent.trim() == "") {
-        todoList.textContent = 'Yay! No Tasks!';
+    if (todoTask.textContent.trim() == "") {
+        todoTask.textContent = 'Yay! No Tasks!';
         return;
      }
 }

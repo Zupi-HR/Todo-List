@@ -63,8 +63,18 @@
     <div id="main-title_container">
       <h2 id="main-title">Default Text</h2>
     </div>
-    <ul id="todo-list">
+    <ul id="todo-task">
+      <form id="task-form" action="">
+        <label for="title">Title: </label>
+        <input type="text" id="title" name="title" placeholder="What to do?" required>
 
+        <label for="details">Details(optional):</label>
+        <input type="text" id="details" name="details" placeholder="eg: I'm just gonna procrastinate, aren't I?">
+
+        <label for="date">Date: </label>
+        <input type="date" required>
+      </form>
+      <button id="add-task" class="hidden">Add Task</button>
     </ul>
   </main>
 </body>

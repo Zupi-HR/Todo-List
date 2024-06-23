@@ -4,6 +4,9 @@ import editIconImage from "./assets/edit_icon.svg";
 import { todoManager } from "./TodoProjectCreator";
 
 // DOM Element Selections
+const mainTitle = document.getElementById('main-title');
+const addTaskBtn = document.getElementById('add-task');
+
 const projectForm = document.getElementById('project-form');
 const projectList = document.getElementById('projects_ul');
 const todoList = document.getElementById('todos-list');
@@ -53,11 +56,35 @@ function showRenameForm(todoItemText) {
         renameForm.classList.add('hidden');
 
         renameSubmitButton.removeEventListener('click', handleRenameSubmit);
+        renameCancelButton.removeEventListener('click', handleRenameCancel);
     }
+
+    function handleRenameCancel(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        renameProjectInput.value = "";
+        renameForm.classList.add('hidden');
+        renameCancelButton.removeEventListener('click', handleRenameCancel);
+        renameSubmitButton.removeEventListener('click', handleRenameSubmit);
+    }
+
     renameSubmitButton.removeEventListener('click', handleRenameSubmit);
     renameForm.classList.remove('hidden');
     renameSubmitButton.addEventListener('click', handleRenameSubmit);
 
+    renameCancelButton.removeEventListener('click', handleRenameCancel);
+    renameCancelButton.addEventListener('click', handleRenameCancel);
+
+
+}
+
+function renderTodoItemDetails(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    mainTitle.textContent = event.currentTarget.querySelector('p').textContent;
+    addTaskBtn.classList.remove('hidden');
 }
 
 
@@ -87,6 +114,7 @@ function createTodoItemElement(item) {
     })
 
     todoItem.append(todoIcon, todoName, editIcon);
+    todoItem.addEventListener('click', renderTodoItemDetails);
     return todoItem;
 }
 //Function to create and append the options menu to a todo item element

@@ -255,9 +255,10 @@ main {
     padding: 20px;
 }
 
-#todo-list {
+#todo-task {
     display: flex;
     justify-content: center;
     font-size: 1.6rem;
     font-weight: bold;
 }
+
