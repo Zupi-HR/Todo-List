@@ -4,6 +4,7 @@
     --red-color: rgb(249, 10, 10);
     --main-background-color: #ececec;
     --option-background-color: #f3f1f3;
+    --task-form-background-color: #fefcfe;
 }
 
 .navItem-selected {
@@ -171,7 +172,7 @@ input[type=text] {
 }
 
 /* add project */
-#add-project {
+#add-project, #add-task {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -185,6 +186,11 @@ input[type=text] {
 #add-project:hover {
     cursor: pointer;
     background-color: #ececec;
+}
+
+#add-task:hover {
+    cursor: pointer;
+    background-color: var(--task-form-background-color);
 }
 
 #todos-list {
@@ -257,8 +263,40 @@ main {
 
 #todo-task {
     display: flex;
+    gap: 10px;
     justify-content: center;
+    flex-direction: column;
     font-size: 1.6rem;
     font-weight: bold;
+}
+
+#task-form {
+    background-color: var(--task-form-background-color);
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.task-form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.task-form-btn {
+    color: var(--main-background-color);
+    width: 70px;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+}
+
+#task-form-submit {
+    background-color: var(--green-color);
+}
+
+#task-form-cancel {
+    background-color: var(--red-color);
 }
 

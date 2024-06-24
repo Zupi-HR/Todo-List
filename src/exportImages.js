@@ -25,8 +25,10 @@ image5.src = importantIMG;
 const densityIconElement = document.querySelector('.density-icon');
 densityIconElement.src = densityIMG;
 
-const addProjectIcon = document.querySelector('.add-project_icon');
-addProjectIcon.src = addCircleIMG;
+const addProjectIcon = document.querySelectorAll('.add-project_icon');
+addProjectIcon.forEach((image) => {
+    image.src = addCircleIMG;
+});
 
 
 

@@ -2,10 +2,11 @@
 import todosItemIcon from "./assets/materials_icon.svg"
 import editIconImage from "./assets/edit_icon.svg";
 import { todoManager } from "./TodoProjectCreator";
+import { renderTodoItemDetails } from "./TaskFormHandler";
 
 // DOM Element Selections
-const mainTitle = document.getElementById('main-title');
-const addTaskBtn = document.getElementById('add-task');
+
+
 
 const projectForm = document.getElementById('project-form');
 const projectList = document.getElementById('projects_ul');
@@ -79,13 +80,9 @@ function showRenameForm(todoItemText) {
 
 }
 
-function renderTodoItemDetails(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    mainTitle.textContent = event.currentTarget.querySelector('p').textContent;
-    addTaskBtn.classList.remove('hidden');
-}
+
+
+
 
 
 //Function to create a new todo item element
@@ -114,6 +111,7 @@ function createTodoItemElement(item) {
     })
 
     todoItem.append(todoIcon, todoName, editIcon);
+    todoItem.removeEventListener('click', renderTodoItemDetails);
     todoItem.addEventListener('click', renderTodoItemDetails);
     return todoItem;
 }

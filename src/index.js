@@ -8,6 +8,7 @@ import renderImportantTasks from './ImportantTasks';
 import {showProjectForm} from './ProjectFormHandler';
 
 
+
 const navItemsContainer = document.querySelector('ul');
 const submitBTN = document.querySelector('.submit_btn');
 
