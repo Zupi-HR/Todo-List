@@ -14,6 +14,11 @@
     padding: 5px;
 }
 
+.fadeColor {
+    opacity: 0.3;
+    text-decoration: line-through;
+}
+
 html, body {
     height: 100%;
 }
@@ -299,4 +304,36 @@ main {
 #task-form-cancel {
     background-color: var(--red-color);
 }
+
+.task-form-list {
+    padding: 0;
+}
+
+.task-item {
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    height: auto;
+    padding: 10px;
+}
+
+.list-details {
+    flex: 3;
+}
+
+
+.task-title {
+    font-size: 1.5rem;
+    font-weight: inherit;
+}
+
+.task-details {
+    font-size: 0.9rem;
+    font-weight: inherit;
+}
+
+
+
 
