@@ -33,10 +33,14 @@ function createTaskElement(item) {
 
     taskItemCheckboxInput.addEventListener('change', () => {
         if(taskItemCheckboxInput.checked) {
+            item.finished = true;
             console.log('checkboc je chekcan');
+            console.log(item.finished);
             listDetails.classList.add('fadeColor');
         } else {
+            item.finished = false;
             console.log('checkbox je uncheckan');
+            console.log(item.finished);
             listDetails.classList.remove('fadeColor');
         }
     })
@@ -49,11 +53,12 @@ function createTaskElement(item) {
 
 
 function renderTaskItem() {
+    taskFormList.innerHTML = "";
     const inputTitle = document.getElementById('title').value;
     const inputDetails = document.getElementById('details').value;
     const inputDate = document.getElementById('date').value;
 
-    const tasksArray = taskManager.createTask(inputTitle, inputDetails, inputDate);
+    const tasksArray = taskManager.createTask(addTaskBtn.getAttribute('belongs_to'), inputTitle, inputDetails, inputDate);
 
     tasksArray.forEach((taskItem) => {
         taskFormList.appendChild(createTaskElement(taskItem));
@@ -62,11 +67,26 @@ function renderTaskItem() {
     console.log(inputTitle, inputDetails, inputDate);
 }
 
+function displayTasksList(projectID) {
+    taskFormList.innerHTML = "";
+    const tasksArray = taskManager.getTasks(projectID);
+    if(tasksArray !== undefined) {
+        tasksArray.forEach((taskItem) => {
+            taskFormList.appendChild(createTaskElement(taskItem));
+        })
+    } 
+    
+}
+
 function renderTodoItemDetails(event) {
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
+    const projectID = event.currentTarget.getAttribute('data-project');
+    console.log(event.currentTarget.getAttribute('data-project'));
     mainTitle.textContent = event.currentTarget.querySelector('p').textContent;
+    displayTasksList(projectID);
+    addTaskBtn.setAttribute('belongs_to', projectID);
     addTaskBtn.classList.remove('hidden');
 }
 
