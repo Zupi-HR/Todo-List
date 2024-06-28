@@ -26,6 +26,7 @@ function createTaskElement(item) {
     taskItemDetails.classList.add('task-details');
  
     listDetails.append(taskItemTitle, taskItemDetails);
+    isTaskFinished(item, listDetails, taskItemCheckboxInput);
 
     const taskItemDate = document.createElement('div');
     taskItemDate.textContent = item.date;
@@ -49,6 +50,17 @@ function createTaskElement(item) {
  
     return listTodo;
     
+ }
+
+ function isTaskFinished(task, elementToFade, checkbox) {
+    if(task.finished) {
+       // document.querySelector(`task-project="${task.id}"`);
+      elementToFade.classList.add('fadeColor');
+      checkbox.checked = true;
+    } else {
+        elementToFade.classList.remove('fadeColor');
+        checkbox.checked = false;
+    }
  }
 
 
