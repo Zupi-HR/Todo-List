@@ -20,6 +20,7 @@ const renameForm = document.getElementById('rename-form');
 const renameProjectInput = document.getElementById('rename-input');
 const renameSubmitButton = document.getElementById('rename-submit-btn');
 const renameCancelButton = document.getElementById('rename-cancel-btn');
+const mainTitle = document.getElementById('main-title');
 
 
 
@@ -50,6 +51,7 @@ function showRenameForm(todoItemText) {
         //Get the updated list of todos
         const todosArray = todoManager.getTodos();
         todoItemText.textContent = todosArray[todoItemID].name;
+        mainTitle.textContent = todosArray[todoItemID].name;
         console.log(todosArray[todoItemID].name);
 
         //Clear the input field and hide the form
@@ -102,12 +104,15 @@ function createTodoItemElement(item) {
     editIcon.style.marginLeft = "auto";
     editIcon.src = editIconImage;
     editIcon.addEventListener('click', (event) => {
-        event.stopPropagation();
-        createAndAppendOptionsMenu(todoItem);
-        if (!isOptionsMenuOpen) {
-            document.querySelector('body').addEventListener('click', closeOptionsMenu);
-            isOptionsMenuOpen = true;
-        }
+        event.preventDefault();
+        closeOptionsMenu();
+        setTimeout(() => {
+            createAndAppendOptionsMenu(todoItem);
+            if (!isOptionsMenuOpen) {
+                document.querySelector('body').addEventListener('click', closeOptionsMenu);
+                isOptionsMenuOpen = true;
+            }
+        }, 300)
     })
 
     todoItem.append(todoIcon, todoName, editIcon);

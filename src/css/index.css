@@ -307,6 +307,9 @@ main {
 
 .task-form-list {
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .task-item {
@@ -332,6 +335,14 @@ main {
 .task-details {
     font-size: 0.9rem;
     font-weight: inherit;
+}
+
+.task-date {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 3px 6px;
+    border: 1px solid black;
+    border-radius: 10px;
 }
 
 

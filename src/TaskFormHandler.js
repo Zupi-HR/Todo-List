@@ -3,6 +3,7 @@ const taskForm = document.getElementById('task-form');
 const addTaskBtn = document.getElementById('add-task');
 const taskFormSubmit = document.getElementById('task-form-submit');
 const taskFormList = document.querySelector('.task-form-list');
+import editIconImage from "./assets/edit_icon.svg";
 import { taskManager } from "./TaskProjectCreator";
 
 function createTaskElement(item) {
@@ -32,6 +33,12 @@ function createTaskElement(item) {
     taskItemDate.textContent = item.date;
     taskItemDate.classList.add('task-date');
 
+    const editIcon = document.createElement('img');
+    editIcon.src = editIconImage;
+    editIcon.style.display = 'inline-block';
+    
+    
+
     taskItemCheckboxInput.addEventListener('change', () => {
         if(taskItemCheckboxInput.checked) {
             item.finished = true;
@@ -46,7 +53,7 @@ function createTaskElement(item) {
         }
     })
  
-    listTodo.append(taskItemCheckboxInput,listDetails, taskItemDate);
+    listTodo.append(taskItemCheckboxInput,listDetails, taskItemDate, editIcon);
  
     return listTodo;
     
@@ -93,9 +100,8 @@ function displayTasksList(projectID) {
 function renderTodoItemDetails(event) {
     event.preventDefault();
     event.stopPropagation();
-    event.stopImmediatePropagation();
-    const projectID = event.currentTarget.getAttribute('data-project');
-    console.log(event.currentTarget.getAttribute('data-project'));
+    const projectID = parseInt(event.currentTarget.getAttribute('data-project'));
+    console.log("projectID je:", projectID);
     mainTitle.textContent = event.currentTarget.querySelector('p').textContent;
     displayTasksList(projectID);
     addTaskBtn.setAttribute('belongs_to', projectID);
