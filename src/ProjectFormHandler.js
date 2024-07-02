@@ -42,9 +42,8 @@ function showRenameForm(todoItemText) {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
-
         const todoItemID = todoItemText.parentNode.getAttribute('data-project');
-
+    
         //Rename the todo item using the input value
         todoManager.renameTodoById(todoItemID, renameProjectInput.value);
 
@@ -57,7 +56,7 @@ function showRenameForm(todoItemText) {
         //Clear the input field and hide the form
         renameProjectInput.value = "";
         renameForm.classList.add('hidden');
-
+        currentProject.classList.remove('hidden');
         renameSubmitButton.removeEventListener('click', handleRenameSubmit);
         renameCancelButton.removeEventListener('click', handleRenameCancel);
     }
@@ -68,12 +67,19 @@ function showRenameForm(todoItemText) {
         event.stopImmediatePropagation();
         renameProjectInput.value = "";
         renameForm.classList.add('hidden');
+        currentProject.classList.remove('hidden');
         renameCancelButton.removeEventListener('click', handleRenameCancel);
         renameSubmitButton.removeEventListener('click', handleRenameSubmit);
+        closeOptionsMenu();
     }
 
     renameSubmitButton.removeEventListener('click', handleRenameSubmit);
     renameForm.classList.remove('hidden');
+    renameProjectInput.value = todoItemText.textContent;
+    const currentProject = todoItemText.parentNode;
+    todoList.insertBefore(renameForm, currentProject);
+    currentProject.classList.add('hidden');
+
     renameSubmitButton.addEventListener('click', handleRenameSubmit);
 
     renameCancelButton.removeEventListener('click', handleRenameCancel);
@@ -159,6 +165,7 @@ function handleRenameClick(renameButtonElement) {
         event.stopImmediatePropagation();
         const clickedRenameButton = event.currentTarget;
         const todoItemText = clickedRenameButton.parentNode.parentNode.querySelector('p');
+        
         showRenameForm(todoItemText);
 
         console.log("text content od parrent node je: " + todoItemText);
