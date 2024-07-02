@@ -33,7 +33,7 @@ body {
 /* utility classes */
 .hidden {
     visibility: hidden;
-    position: absolute;
+    position: absolute !important;
 }
 
 .show {
@@ -193,7 +193,7 @@ input[type=text] {
     background-color: #ececec;
 }
 
-#add-task:hover {
+#add-task:hover, .task-item:hover {
     cursor: pointer;
     background-color: var(--task-form-background-color);
 }
@@ -220,16 +220,18 @@ input[type=text] {
 }
 
 
-.project-option {
+.option {
     display: flex;
     flex-direction: column;
     gap: 10px;
     background-color: var(--option-background-color);
-    padding: 4px;
+    padding: 7px;
     border-radius: 10px;
     position: absolute;
+    z-index: 10;
     bottom: 40px;
     right: 20px;
+    font-size: 1.2rem;
 }
 
 #rename-project, #delete-project {
@@ -275,7 +277,7 @@ main {
     font-weight: bold;
 }
 
-#task-form {
+#task-form, #editTaskForm {
     background-color: var(--task-form-background-color);
     padding: 20px;
     display: flex;
@@ -283,7 +285,7 @@ main {
     flex-direction: column;
 }
 
-.task-form-buttons {
+.task-form-buttons, .editTask-form-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -297,11 +299,11 @@ main {
     border: none;
 }
 
-#task-form-submit {
+#task-form-submit, #editTask-form-submit {
     background-color: var(--green-color);
 }
 
-#task-form-cancel {
+#task-form-cancel, #editTask-form-cancel {
     background-color: var(--red-color);
 }
 
@@ -320,6 +322,7 @@ main {
     align-items: center;
     height: auto;
     padding: 10px;
+    position: relative;
 }
 
 .list-details {
@@ -345,6 +348,14 @@ main {
     border-radius: 10px;
 }
 
+.tasks-option {
+    right: 10px;
+    bottom: 70px;
+}
+
+#editTaskForm {
+    background-color: inherit;
+}
 
 
 

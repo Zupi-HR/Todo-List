@@ -123,7 +123,7 @@ function createTodoItemElement(item) {
 //Function to create and append the options menu to a todo item element
 function createAndAppendOptionsMenu(todoItem) {
     const optionsMenu = document.createElement('div');
-    optionsMenu.classList.add("project-option");
+    optionsMenu.classList.add("option", "project-option");
 
     const renameOption = document.createElement('p');
     renameOption.id = `rename-project_${todoItem.getAttribute('data-project')}`;
@@ -148,6 +148,8 @@ function closeOptionsMenu() {
     document.querySelector('body').removeEventListener('click', closeOptionsMenu);
     isOptionsMenuOpen = false;
 }
+
+
 
 //Function to handle the rename button click event
 function handleRenameClick(renameButtonElement) {

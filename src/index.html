@@ -64,6 +64,23 @@
       <h2 id="main-title">Default Text</h2>
     </div>
     <div id="todo-task">
+
+      <form id="editTaskForm" class="hidden" action="">
+        <label for="editTaskTitle">Title: </label>
+        <input type="text" id="editTaskTitle" class="task-input-field" name="title" placeholder="What to do?" required>
+
+        <label for="editTaskDetails">Details(optional):</label>
+        <input type="text" id="editTaskDetails" class="task-input-field" name="details"
+          placeholder="eg: I'm just gonna procrastinate, aren't I?">
+
+        <label for="editTaskDate">Date: </label>
+        <input type="date" id="editTaskDate" class="task-input-field" required>
+        <div class="editTask-form-buttons">
+          <input type="submit" id="editTask-form-submit" class="task-form-btn" value="Add">
+          <input type="button" id="editTask-form-cancel" class="task-form-btn" value="Cancel">
+        </div>
+      </form>
+
       <ul class="task-form-list">
 
       </ul>
@@ -72,7 +89,8 @@
         <input type="text" id="title" class="task-input-field" name="title" placeholder="What to do?" required>
 
         <label for="details">Details(optional):</label>
-        <input type="text" id="details" class="task-input-field" name="details" placeholder="eg: I'm just gonna procrastinate, aren't I?">
+        <input type="text" id="details" class="task-input-field" name="details"
+          placeholder="eg: I'm just gonna procrastinate, aren't I?">
 
         <label for="date">Date: </label>
         <input type="date" id="date" class="task-input-field" required>
