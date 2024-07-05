@@ -16,22 +16,22 @@ function createTaskElement(item) {
     const listTodo = document.createElement('li');
     listTodo.setAttribute("task-project", item.id);
     listTodo.classList.add('task-item');
- 
+
     const taskItemCheckboxInput = document.createElement('input');
     taskItemCheckboxInput.setAttribute('type', 'checkbox');
     taskItemCheckboxInput.id = "task-item-checkbox";
- 
+
     const listDetails = document.createElement('div');
     listDetails.classList.add('list-details');
- 
+
     const taskItemTitle = document.createElement('h3');
     taskItemTitle.classList.add('task-title');
     taskItemTitle.textContent = item.title;
- 
+
     const taskItemDetails = document.createElement('p');
     taskItemDetails.textContent = item.details;
     taskItemDetails.classList.add('task-details');
- 
+
     listDetails.append(taskItemTitle, taskItemDetails);
     isTaskFinished(item, listDetails, taskItemCheckboxInput);
 
@@ -42,7 +42,7 @@ function createTaskElement(item) {
     const editIcon = document.createElement('img');
     editIcon.src = editIconImage;
     editIcon.style.display = 'inline-block';
-    
+
     editIcon.addEventListener('click', (event) => {
         event.preventDefault();
         closeOptionsMenu();
@@ -55,10 +55,10 @@ function createTaskElement(item) {
             }
         }, 300)
     })
-    
+
 
     taskItemCheckboxInput.addEventListener('change', () => {
-        if(taskItemCheckboxInput.checked) {
+        if (taskItemCheckboxInput.checked) {
             item.finished = true;
             console.log('checkboc je chekcan');
             console.log(item.finished);
@@ -70,14 +70,14 @@ function createTaskElement(item) {
             listDetails.classList.remove('fadeColor');
         }
     })
- 
-    listTodo.append(taskItemCheckboxInput,listDetails, taskItemDate, editIcon);
- 
-    return listTodo;
-    
- }
 
- function createAndAppendOptionsMenu(tasksItem) {
+    listTodo.append(taskItemCheckboxInput, listDetails, taskItemDate, editIcon);
+
+    return listTodo;
+
+}
+
+function createAndAppendOptionsMenu(tasksItem) {
     const optionMenu = document.createElement('div');
     optionMenu.classList.add("option", "tasks-option");
 
@@ -89,13 +89,13 @@ function createTaskElement(item) {
     const deleteOption = document.createElement('p');
     deleteOption.id = `delete-otion_${tasksItem.getAttribute('task-project')}`;
     deleteOption.textContent = 'Delete';
-   // handleDeleteClick(deleteOption);
+    // handleDeleteClick(deleteOption);
 
     optionMenu.append(editOption, deleteOption);
     tasksItem.appendChild(optionMenu);
- }
+}
 
- function closeOptionsMenu() {
+function closeOptionsMenu() {
     document.querySelectorAll('.tasks-option').forEach((element) => {
         element.remove();
     })
@@ -111,42 +111,75 @@ function handleEditClick(editOption) {
 
         const parentTaskList = event.currentTarget.parentNode.parentNode;
         console.log(parentTaskList);
-      showEditFormTask(parentTaskList)
+        showEditFormTask(parentTaskList)
     })
 }
 
 function showEditFormTask(taskProject) {
+    function handleEditTaskFormSubmit(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        const currentTaskTitle = taskProject.querySelector('.task-title');
+        const currentTaskDetails = taskProject.querySelector('.task-details');
+        const currentTaskDate = taskProject.querySelector('.task-date');
+
+        const editTaskTitle = document.getElementById('editTaskTitle').value;
+        const editTaskDetails = document.getElementById('editTaskDetails').value;
+        const editTaskDate = document.getElementById('editTaskDate').value;
+
+        taskManager.editTask(addTaskBtn.getAttribute('belongs_to'), taskProject.getAttribute('task-project'), editTaskTitle, editTaskDetails, editTaskDate);
+
+        const tasksArray = taskManager.getTasks(addTaskBtn.getAttribute('belongs_to'));
+        currentTaskTitle.textContent = tasksArray[taskProject.getAttribute('task-project')].title;
+        currentTaskDetails.textContent = tasksArray[taskProject.getAttribute('task-project')].details;
+        currentTaskDate.textContent = tasksArray[taskProject.getAttribute('task-project')].date;
+        console.log(tasksArray[taskProject.getAttribute('task-project')]);
+
+        clearInputFields();
+        editTaskForm.classList.add('hidden');
+        taskProject.classList.remove('hidden');
+        editTaskFormSubmit.removeEventListener('click', handleEditTaskFormSubmit);
+        
+        console.log(taskProject);
+    }
+
     editTaskForm.classList.remove('hidden');
     taskFormList.insertBefore(editTaskForm, taskProject);
     taskProject.classList.add('hidden');
     populateEditFormTask(taskProject);
+    editTaskFormSubmit.addEventListener('click', handleEditTaskFormSubmit);
+  
 }
+
 
 function populateEditFormTask(taskProject) {
     const editTaskTitle = document.getElementById('editTaskTitle');
     const editTaskDetails = document.getElementById('editTaskDetails');
     const editTaskDate = document.getElementById('editTaskDate');
-    
-   const currentTaskTitle = taskProject.querySelector('.task-title').textContent;
-   const currentTaskDetails = taskProject.querySelector('.task-details').textContent;
-   const currentTaskDate = taskProject.querySelector('.task-date').textContent;
 
-   editTaskTitle.value = currentTaskTitle;
-   editTaskDetails.value = currentTaskDetails;
-   editTaskDate.value = currentTaskDate;
-   
+    const currentTaskTitle = taskProject.querySelector('.task-title').textContent;
+    const currentTaskDetails = taskProject.querySelector('.task-details').textContent;
+    const currentTaskDate = taskProject.querySelector('.task-date').textContent;
+
+    editTaskTitle.value = currentTaskTitle;
+    editTaskDetails.value = currentTaskDetails;
+    editTaskDate.value = currentTaskDate;
+
 }
 
- function isTaskFinished(task, elementToFade, checkbox) {
-    if(task.finished) {
-       // document.querySelector(`task-project="${task.id}"`);
-      elementToFade.classList.add('fadeColor');
-      checkbox.checked = true;
+
+
+function isTaskFinished(task, elementToFade, checkbox) {
+    if (task.finished) {
+        // document.querySelector(`task-project="${task.id}"`);
+        elementToFade.classList.add('fadeColor');
+        checkbox.checked = true;
     } else {
         elementToFade.classList.remove('fadeColor');
         checkbox.checked = false;
     }
- }
+}
 
 
 function renderTaskItem() {
@@ -167,12 +200,12 @@ function renderTaskItem() {
 function displayTasksList(projectID) {
     taskFormList.innerHTML = "";
     const tasksArray = taskManager.getTasks(projectID);
-    if(tasksArray !== undefined) {
+    if (tasksArray !== undefined) {
         tasksArray.forEach((taskItem) => {
             taskFormList.appendChild(createTaskElement(taskItem));
         })
-    } 
-    
+    }
+
 }
 
 function renderTodoItemDetails(event) {
@@ -189,10 +222,11 @@ function renderTodoItemDetails(event) {
 addTaskBtn.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
-   taskForm.classList.remove('hidden');
+    taskForm.classList.remove('hidden');
 })
 
 function handleTaskFormSubmission(event) {
+    taskForm.classList.remove('hidden');
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -201,7 +235,8 @@ function handleTaskFormSubmission(event) {
 
     renderTaskItem();
     clearInputFields();
-    
+    taskForm.classList.add('hidden');
+
 }
 
 
@@ -213,6 +248,7 @@ function clearInputFields() {
 }
 
 taskFormSubmit.addEventListener('click', handleTaskFormSubmission);
+
 
 
 export { renderTodoItemDetails }

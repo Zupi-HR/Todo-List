@@ -15,8 +15,10 @@ class TaskManager {
         return this.tasks[position];
     }
 
-    editTask() {
-
+    editTask(position, id, title, details, date) {
+     this.tasks[position][id].title = title;
+     this.tasks[position][id].details = details;
+     this.tasks[position][id].date = date;
     }
 
     deleteTaskById(id) {
