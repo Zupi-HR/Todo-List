@@ -21,11 +21,11 @@ class TaskManager {
      this.tasks[position][id].date = date;
     }
 
-    deleteTaskById(id) {
-        if(this.tasks[id]) {
+    deleteTaskById(position, id) {
+        if(this.tasks[position][id]) {
             console.log(`ID of item that will be deleted ${id}`);
-            this.tasks.splice(id, 1);
-            this.updateTaskIDs();
+            this.tasks[position].splice(id, 1);
+            this.updateTaskIDs(position);
         } else {
             console.error(`Task with ID: ${id} not found`);
         }

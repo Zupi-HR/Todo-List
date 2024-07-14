@@ -3,6 +3,7 @@ import todosItemIcon from "./assets/materials_icon.svg"
 import editIconImage from "./assets/edit_icon.svg";
 import { todoManager } from "./TodoProjectCreator";
 import { renderTodoItemDetails } from "./TaskFormHandler";
+import { taskManager } from "./TaskProjectCreator";
 
 // DOM Element Selections
 

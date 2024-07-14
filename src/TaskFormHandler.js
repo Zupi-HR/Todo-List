@@ -87,9 +87,9 @@ function createAndAppendOptionsMenu(tasksItem) {
     handleEditClick(editOption);
 
     const deleteOption = document.createElement('p');
-    deleteOption.id = `delete-otion_${tasksItem.getAttribute('task-project')}`;
+    deleteOption.id = `delete-ootion_${tasksItem.getAttribute('task-project')}`;
     deleteOption.textContent = 'Delete';
-    // handleDeleteClick(deleteOption);
+     handleDeleteClick(deleteOption);
 
     optionMenu.append(editOption, deleteOption);
     tasksItem.appendChild(optionMenu);
@@ -113,6 +113,29 @@ function handleEditClick(editOption) {
         console.log(parentTaskList);
         showEditFormTask(parentTaskList)
     })
+}
+
+function handleDeleteClick(deleteOption) {
+    deleteOption.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        const taskID = event.currentTarget.parentNode.parentNode.getAttribute('task-project');
+        const belongsTo = addTaskBtn.getAttribute('belongs_to');
+        taskManager.deleteTaskById(belongsTo, taskID);
+        event.currentTarget.parentNode.parentNode.remove();
+        updateTaskListIds(belongsTo);
+    })
+}
+
+function updateTaskListIds(position) {
+  const taskArray = taskManager.getTasks(position);
+  console.log(taskArray);
+  const taskElements = document.querySelectorAll('.task-item');
+  for (let index = 0; index < taskArray.length; index++) {
+    taskElements[index].setAttribute('task-project', taskArray[index].id);
+    
+  }
 }
 
 function showEditFormTask(taskProject) {
