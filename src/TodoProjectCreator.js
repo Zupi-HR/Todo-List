@@ -1,3 +1,5 @@
+import { taskManager } from "./TaskProjectCreator";
+
 
 class TodoManager {
     constructor() {
@@ -24,6 +26,7 @@ class TodoManager {
         if (this.todos[id]) {
             console.log(`ID of item that will be deleted ${id}`);
             this.todos.splice(id, 1);
+            taskManager.deleteAllTasksInTodo(id);
             this.updateTodoIDs();
         } else {
             console.error(`Todo with ID: ${id} not found.`);

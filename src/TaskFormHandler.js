@@ -2,6 +2,7 @@ const mainTitle = document.getElementById('main-title');
 const taskForm = document.getElementById('task-form');
 const addTaskBtn = document.getElementById('add-task');
 const taskFormSubmit = document.getElementById('task-form-submit');
+const taskFormCancel = document.getElementById('task-form-cancel');
 const taskFormList = document.querySelector('.task-form-list');
 const editTaskForm = document.getElementById('editTaskForm');
 const editTaskFormSubmit = document.getElementById('editTask-form-submit');
@@ -262,6 +263,15 @@ function handleTaskFormSubmission(event) {
 
 }
 
+function handleTaskFormCancel(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    clearInputFields();
+    taskForm.classList.add('hidden');
+
+}
+
 
 function clearInputFields() {
     const inputFields = document.querySelectorAll('.task-input-field');
@@ -271,7 +281,8 @@ function clearInputFields() {
 }
 
 taskFormSubmit.addEventListener('click', handleTaskFormSubmission);
+taskFormCancel.addEventListener('click', handleTaskFormCancel);
 
 
 
-export { renderTodoItemDetails }
+export { renderTodoItemDetails, addTaskBtn }

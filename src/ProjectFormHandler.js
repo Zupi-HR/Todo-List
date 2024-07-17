@@ -2,7 +2,7 @@
 import todosItemIcon from "./assets/materials_icon.svg"
 import editIconImage from "./assets/edit_icon.svg";
 import { todoManager } from "./TodoProjectCreator";
-import { renderTodoItemDetails } from "./TaskFormHandler";
+import { renderTodoItemDetails, addTaskBtn } from "./TaskFormHandler";
 import { taskManager } from "./TaskProjectCreator";
 
 // DOM Element Selections
@@ -22,6 +22,8 @@ const renameProjectInput = document.getElementById('rename-input');
 const renameSubmitButton = document.getElementById('rename-submit-btn');
 const renameCancelButton = document.getElementById('rename-cancel-btn');
 const mainTitle = document.getElementById('main-title');
+const taskFormList = document.querySelector('.task-form-list');
+
 
 
 
@@ -189,8 +191,18 @@ function handleDeleteClick(deleteButtonElement) {
         todoManager.deleteTodoById(projectId);
         console.log(projectId);
         clickedDeleteButton.parentNode.parentNode.remove();
+        deleteAllTasks();
+        mainTitle.textContent = "No Project Selected";
+      //  addTaskBtn.removeAttribute('belongs_to');
+        addTaskBtn.classList.add('hidden');
         updateTodoListIDs();
     })
+}
+
+function deleteAllTasks() {
+    while(taskFormList.firstChild) {
+        taskFormList.removeChild(taskFormList.firstChild);
+    }
 }
 
 //Function to update the IDs of the todo list elements

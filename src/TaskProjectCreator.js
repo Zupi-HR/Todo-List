@@ -31,6 +31,16 @@ class TaskManager {
         }
     }
 
+    deleteAllTasksInTodo(position) {
+        if (this.tasks[position]) {
+            console.log(`Task array with a position ${position} will be deleted`);
+            this.tasks.splice(position, 1);
+            console.log(this.tasks);
+        } else {
+            console.error(`Task array position ${position} not found`);
+        }
+    }
+
     getTasks(position) {
         //this.updateTaskIDs();
         return this.tasks[position];
