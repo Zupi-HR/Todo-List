@@ -285,4 +285,4 @@ taskFormCancel.addEventListener('click', handleTaskFormCancel);
 
 
 
-export { renderTodoItemDetails, addTaskBtn }
+export { renderTodoItemDetails, addTaskBtn, createTaskElement }

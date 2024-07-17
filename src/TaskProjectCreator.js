@@ -46,6 +46,10 @@ class TaskManager {
         return this.tasks[position];
     }
 
+    getAllTasks() {
+        return this.tasks;
+    }
+
     updateTaskIDs(position) {
         this.tasks[position] = this.tasks[position].map((item, index) => (item.id = index, item));
     }
