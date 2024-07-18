@@ -15,8 +15,8 @@ let isOptionsMenuOpen = false;
 
 function createTaskElement(item) {
     const listTodo = document.createElement('li');
-    listTodo.setAttribute("task-project", item.id);
     listTodo.classList.add('task-item');
+    listTodo.id = item.id;
 
     const taskItemCheckboxInput = document.createElement('input');
     taskItemCheckboxInput.setAttribute('type', 'checkbox');
@@ -121,20 +121,23 @@ function handleDeleteClick(deleteOption) {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
-        const taskID = event.currentTarget.parentNode.parentNode.getAttribute('task-project');
-        const belongsTo = addTaskBtn.getAttribute('belongs_to');
-        taskManager.deleteTaskById(belongsTo, taskID);
+        const taskID = event.currentTarget.parentNode.parentNode.id;
+        console.log('id za brisat je:', taskID);
+        const belongsToID = addTaskBtn.getAttribute('belongs_to');
+        const belongsTo = document.querySelector(`.todos-item[data-project="${belongsToID}"]`).querySelector('p').textContent;
+        console.log('aktivan projekt je', belongsTo);
+        taskManager.deleteTaskById(taskID);
         event.currentTarget.parentNode.parentNode.remove();
         updateTaskListIds(belongsTo);
     })
 }
 
-function updateTaskListIds(position) {
-  const taskArray = taskManager.getTasks(position);
-  console.log(taskArray);
+function updateTaskListIds(belongsTo) {
+  const taskArray = taskManager.getTasks(belongsTo);
+  console.log("taskarray filteran je", taskArray);
   const taskElements = document.querySelectorAll('.task-item');
   for (let index = 0; index < taskArray.length; index++) {
-    taskElements[index].setAttribute('task-project', taskArray[index].id);
+    taskElements[index].id = taskArray[index].id;
     
   }
 }
@@ -152,7 +155,7 @@ function showEditFormTask(taskProject) {
         const editTaskDetails = document.getElementById('editTaskDetails').value;
         const editTaskDate = document.getElementById('editTaskDate').value;
 
-        taskManager.editTask(addTaskBtn.getAttribute('belongs_to'), taskProject.getAttribute('task-project'), editTaskTitle, editTaskDetails, editTaskDate);
+        taskManager.editTask(taskProject.getAttribute('task-project'), editTaskTitle, editTaskDetails, editTaskDate);
 
         const tasksArray = taskManager.getTasks(addTaskBtn.getAttribute('belongs_to'));
         currentTaskTitle.textContent = tasksArray[taskProject.getAttribute('task-project')].title;
@@ -211,8 +214,10 @@ function renderTaskItem() {
     const inputTitle = document.getElementById('title').value;
     const inputDetails = document.getElementById('details').value;
     const inputDate = document.getElementById('date').value;
-
-    const tasksArray = taskManager.createTask(addTaskBtn.getAttribute('belongs_to'), inputTitle, inputDetails, inputDate);
+    const currentProject = document.querySelector(`[data-project="${taskForm.getAttribute('belongs_to')}"]`);
+    const belongsTo = currentProject.querySelector('p').textContent;
+    console.log(belongsTo);
+    const tasksArray = taskManager.createTask(belongsTo, inputTitle, inputDetails, inputDate);
 
     tasksArray.forEach((taskItem) => {
         taskFormList.appendChild(createTaskElement(taskItem));
@@ -221,9 +226,9 @@ function renderTaskItem() {
     console.log(inputTitle, inputDetails, inputDate);
 }
 
-function displayTasksList(projectID) {
+function displayTasksList(belongsTo) {
     taskFormList.innerHTML = "";
-    const tasksArray = taskManager.getTasks(projectID);
+    const tasksArray = taskManager.getTasks(belongsTo);
     if (tasksArray !== undefined) {
         tasksArray.forEach((taskItem) => {
             taskFormList.appendChild(createTaskElement(taskItem));
@@ -238,7 +243,7 @@ function renderTodoItemDetails(event) {
     const projectID = parseInt(event.currentTarget.getAttribute('data-project'));
     console.log("projectID je:", projectID);
     mainTitle.textContent = event.currentTarget.querySelector('p').textContent;
-    displayTasksList(projectID);
+    displayTasksList(event.currentTarget.querySelector('p').textContent);
     addTaskBtn.setAttribute('belongs_to', projectID);
     addTaskBtn.classList.remove('hidden');
 }
@@ -247,6 +252,9 @@ addTaskBtn.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
     taskForm.classList.remove('hidden');
+
+    const addTaskCurrentID = event.currentTarget.getAttribute('belongs_to');
+    taskForm.setAttribute('belongs_to', addTaskCurrentID);
 })
 
 function handleTaskFormSubmission(event) {

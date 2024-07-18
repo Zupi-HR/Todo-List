@@ -7,8 +7,6 @@ import { taskManager } from "./TaskProjectCreator";
 
 // DOM Element Selections
 
-
-
 const projectForm = document.getElementById('project-form');
 const projectList = document.getElementById('projects_ul');
 const todoList = document.getElementById('todos-list');
@@ -23,8 +21,6 @@ const renameSubmitButton = document.getElementById('rename-submit-btn');
 const renameCancelButton = document.getElementById('rename-cancel-btn');
 const mainTitle = document.getElementById('main-title');
 const taskFormList = document.querySelector('.task-form-list');
-
-
 
 
 //State variable to track if the options menu is open
@@ -90,10 +86,6 @@ function showRenameForm(todoItemText) {
 
 
 }
-
-
-
-
 
 
 //Function to create a new todo item element
@@ -188,7 +180,8 @@ function handleDeleteClick(deleteButtonElement) {
         event.stopImmediatePropagation();
         const clickedDeleteButton = event.currentTarget;
         const projectId = clickedDeleteButton.parentNode.parentNode.getAttribute('data-project');
-        todoManager.deleteTodoById(projectId);
+        const textContent = clickedDeleteButton.parentNode.parentNode.querySelector('p').textContent;
+        todoManager.deleteTodoById(projectId, textContent);
         console.log(projectId);
         clickedDeleteButton.parentNode.parentNode.remove();
         deleteAllTasks();

@@ -13,14 +13,10 @@ function renderTaskItem() {
   const tasksArray = taskManager.getAllTasks();
 
   if (tasksArray !== undefined) {
-    for (let i = 0; i < tasksArray.length; i++) {
-      for (let j = 0; j < tasksArray[i].length; j++) {
-       taskFormList.appendChild(createTaskElement(tasksArray[i][j]));
-      
-      }
-    }
+   tasksArray.forEach((taskArray) => {
+    taskFormList.appendChild(createTaskElement(taskArray));
+   })
   }
-
 }
 
 function renderAllTasks() {

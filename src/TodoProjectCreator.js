@@ -22,11 +22,11 @@ class TodoManager {
 
     }
 
-    deleteTodoById(id) {
+    deleteTodoById(id, belongsTo) {
         if (this.todos[id]) {
             console.log(`ID of item that will be deleted ${id}`);
             this.todos.splice(id, 1);
-            taskManager.deleteAllTasksInTodo(id);
+            taskManager.deleteAllTasksInTodo(belongsTo);
             this.updateTodoIDs();
         } else {
             console.error(`Todo with ID: ${id} not found.`);
