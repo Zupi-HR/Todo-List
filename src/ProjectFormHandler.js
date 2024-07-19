@@ -42,16 +42,18 @@ function showRenameForm(todoItemText) {
         event.stopPropagation();
         event.stopImmediatePropagation();
         const todoItemID = todoItemText.parentNode.getAttribute('data-project');
-    
+        const tasksArray = taskManager.getTasks(todoItemText.textContent);
         //Rename the todo item using the input value
         todoManager.renameTodoById(todoItemID, renameProjectInput.value);
 
-        //Get the updated list of todos
+        //Get the updated list of todos and update tasks belongTo property
         const todosArray = todoManager.getTodos();
         todoItemText.textContent = todosArray[todoItemID].name;
         mainTitle.textContent = todosArray[todoItemID].name;
         console.log(todosArray[todoItemID].name);
-
+        tasksArray.forEach((task) => {
+            task.belongsTo = todoItemText.textContent;
+        })
         //Clear the input field and hide the form
         renameProjectInput.value = "";
         renameForm.classList.add('hidden');
