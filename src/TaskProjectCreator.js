@@ -27,7 +27,7 @@ class TaskManager {
         }
     }
 
-    deleteAllTasksInTodo(belongs_to) {
+    deleteAllTasksInTodo(belongs_to) {  
        this.tasks = this.tasks.filter(task => !(task.belongsTo === belongs_to));
     }
 
