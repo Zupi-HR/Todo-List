@@ -1,3 +1,5 @@
+const { format } = require("date-fns");
+
 const mainTitle = document.getElementById('main-title');
 const taskForm = document.getElementById('task-form');
 const addTaskBtn = document.getElementById('add-task');
@@ -37,7 +39,8 @@ function createTaskElement(item) {
     isTaskFinished(item, listDetails, taskItemCheckboxInput);
 
     const taskItemDate = document.createElement('div');
-    taskItemDate.textContent = item.date;
+    taskItemDate.textContent = format(item.date, 'dd/MMM/yyyy');
+    console.log('formatirani datum je:', taskItemDate.textContent);
     taskItemDate.classList.add('task-date');
 
     const editIcon = document.createElement('img');
@@ -157,11 +160,11 @@ function showEditFormTask(taskProject) {
         console.log("id od itema za editiranje u dom je: ", taskProject.id);
         taskManager.editTask(taskProject.id, editTaskTitle, editTaskDetails, editTaskDate);
 
-        const tasksArray = taskManager.getAllTasks();
-        console.log(tasksArray);
+       
+        console.log(tasksArray, "jeeeee");
         currentTaskTitle.textContent = tasksArray[taskProject.id].title;
         currentTaskDetails.textContent = tasksArray[taskProject.id].details;
-        currentTaskDate.textContent = tasksArray[taskProject.id].date;
+        currentTaskDate.textContent = format(tasksArray[taskProject.id].date, 'dd/MMM/yyyy');
 
         clearInputFields();
         editTaskForm.classList.add('hidden');
@@ -174,20 +177,21 @@ function showEditFormTask(taskProject) {
     editTaskForm.classList.remove('hidden');
     taskFormList.insertBefore(editTaskForm, taskProject);
     taskProject.classList.add('hidden');
-    populateEditFormTask(taskProject);
+    const tasksArray = taskManager.getAllTasks();
+    populateEditFormTask(tasksArray, taskProject.id);
     editTaskFormSubmit.addEventListener('click', handleEditTaskFormSubmit);
 
 }
 
 
-function populateEditFormTask(taskProject) {
+function populateEditFormTask(tasksArray, currentID) {
     const editTaskTitle = document.getElementById('editTaskTitle');
     const editTaskDetails = document.getElementById('editTaskDetails');
     const editTaskDate = document.getElementById('editTaskDate');
 
-    const currentTaskTitle = taskProject.querySelector('.task-title').textContent;
-    const currentTaskDetails = taskProject.querySelector('.task-details').textContent;
-    const currentTaskDate = taskProject.querySelector('.task-date').textContent;
+    const currentTaskTitle = tasksArray[currentID].title;
+    const currentTaskDetails = tasksArray[currentID].details;
+    const currentTaskDate = tasksArray[currentID].date;
 
     editTaskTitle.value = currentTaskTitle;
     editTaskDetails.value = currentTaskDetails;
@@ -213,12 +217,11 @@ function renderTaskItem() {
     taskFormList.innerHTML = "";
     const inputTitle = document.getElementById('title').value;
     const inputDetails = document.getElementById('details').value;
-    const inputDate = document.getElementById('date').value;
+    const inputDate =  document.getElementById('date').value;
     const currentProject = document.querySelector(`[data-project="${taskForm.getAttribute('belongs_to')}"]`);
     const belongsTo = currentProject.querySelector('p').textContent;
     console.log(belongsTo);
     const tasksArray = taskManager.createTask(belongsTo, inputTitle, inputDetails, inputDate);
-
     tasksArray.forEach((taskItem) => {
         taskFormList.appendChild(createTaskElement(taskItem));
     })
