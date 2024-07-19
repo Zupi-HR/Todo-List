@@ -90,7 +90,7 @@ function createAndAppendOptionsMenu(tasksItem) {
     const deleteOption = document.createElement('p');
     deleteOption.id = `delete-ootion_${tasksItem.getAttribute('task-project')}`;
     deleteOption.textContent = 'Delete';
-     handleDeleteClick(deleteOption);
+    handleDeleteClick(deleteOption);
 
     optionMenu.append(editOption, deleteOption);
     tasksItem.appendChild(optionMenu);
@@ -133,13 +133,13 @@ function handleDeleteClick(deleteOption) {
 }
 
 function updateTaskListIds(belongsTo) {
-  const taskArray = taskManager.getTasks(belongsTo);
-  console.log("taskarray filteran je", taskArray);
-  const taskElements = document.querySelectorAll('.task-item');
-  for (let index = 0; index < taskArray.length; index++) {
-    taskElements[index].id = taskArray[index].id;
-    
-  }
+    const taskArray = taskManager.getTasks(belongsTo);
+    console.log("taskarray filteran je", taskArray);
+    const taskElements = document.querySelectorAll('.task-item');
+    for (let index = 0; index < taskArray.length; index++) {
+        taskElements[index].id = taskArray[index].id;
+
+    }
 }
 
 function showEditFormTask(taskProject) {
@@ -154,20 +154,20 @@ function showEditFormTask(taskProject) {
         const editTaskTitle = document.getElementById('editTaskTitle').value;
         const editTaskDetails = document.getElementById('editTaskDetails').value;
         const editTaskDate = document.getElementById('editTaskDate').value;
+        console.log("id od itema za editiranje u dom je: ", taskProject.id);
+        taskManager.editTask(taskProject.id, editTaskTitle, editTaskDetails, editTaskDate);
 
-        taskManager.editTask(taskProject.getAttribute('task-project'), editTaskTitle, editTaskDetails, editTaskDate);
-
-        const tasksArray = taskManager.getTasks(addTaskBtn.getAttribute('belongs_to'));
-        currentTaskTitle.textContent = tasksArray[taskProject.getAttribute('task-project')].title;
-        currentTaskDetails.textContent = tasksArray[taskProject.getAttribute('task-project')].details;
-        currentTaskDate.textContent = tasksArray[taskProject.getAttribute('task-project')].date;
-        console.log(tasksArray[taskProject.getAttribute('task-project')]);
+        const tasksArray = taskManager.getAllTasks();
+        console.log(tasksArray);
+        currentTaskTitle.textContent = tasksArray[taskProject.id].title;
+        currentTaskDetails.textContent = tasksArray[taskProject.id].details;
+        currentTaskDate.textContent = tasksArray[taskProject.id].date;
 
         clearInputFields();
         editTaskForm.classList.add('hidden');
         taskProject.classList.remove('hidden');
         editTaskFormSubmit.removeEventListener('click', handleEditTaskFormSubmit);
-        
+
         console.log(taskProject);
     }
 
@@ -176,7 +176,7 @@ function showEditFormTask(taskProject) {
     taskProject.classList.add('hidden');
     populateEditFormTask(taskProject);
     editTaskFormSubmit.addEventListener('click', handleEditTaskFormSubmit);
-  
+
 }
 
 
