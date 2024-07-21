@@ -39,7 +39,7 @@ function createTaskElement(item) {
     isTaskFinished(item, listDetails, taskItemCheckboxInput);
 
     const taskItemDate = document.createElement('div');
-    taskItemDate.textContent = format(item.date, 'dd/MMM/yyyy');
+    taskItemDate.textContent = (item.date !== "") ? format(item.date, 'dd/MMM/yyyy') : "";
     console.log('formatirani datum je:', taskItemDate.textContent);
     taskItemDate.classList.add('task-date');
 
@@ -164,13 +164,12 @@ function showEditFormTask(taskProject) {
         console.log(tasksArray, "jeeeee");
         currentTaskTitle.textContent = tasksArray[taskProject.id].title;
         currentTaskDetails.textContent = tasksArray[taskProject.id].details;
-        currentTaskDate.textContent = format(tasksArray[taskProject.id].date, 'dd/MMM/yyyy');
-
+        currentTaskDate.textContent = (tasksArray[taskProject.id].date !== "") ? format(tasksArray[taskProject.id].date, 'dd/MMM/yyyy') : "";
+        
         clearInputFields();
         editTaskForm.classList.add('hidden');
         taskProject.classList.remove('hidden');
         editTaskFormSubmit.removeEventListener('click', handleEditTaskFormSubmit);
-
         console.log(taskProject);
     }
 
@@ -180,7 +179,7 @@ function showEditFormTask(taskProject) {
     const tasksArray = taskManager.getAllTasks();
     populateEditFormTask(tasksArray, taskProject.id);
     editTaskFormSubmit.addEventListener('click', handleEditTaskFormSubmit);
-
+    
 }
 
 
