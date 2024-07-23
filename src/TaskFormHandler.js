@@ -12,6 +12,8 @@ const editTaskFormCancel = document.getElementById('editTask-form-cancel');
 
 import editIconImage from "./assets/edit_icon.svg";
 import { taskManager } from "./TaskProjectCreator";
+import {renderTaskItems as renderTodayTaskElements} from "./TodayTasks";
+import { renderTaskItems as renderNext7DaysTaskElements } from "./Next7DaysTasks";
 let isOptionsMenuOpen = false;
 
 
@@ -169,6 +171,7 @@ function showEditFormTask(taskProject) {
         clearInputFields();
         editTaskForm.classList.add('hidden');
         taskProject.classList.remove('hidden');
+        refreshTaskList();
         editTaskFormSubmit.removeEventListener('click', handleEditTaskFormSubmit);
         console.log(taskProject);
     }
@@ -179,7 +182,37 @@ function showEditFormTask(taskProject) {
     const tasksArray = taskManager.getAllTasks();
     populateEditFormTask(tasksArray, taskProject.id);
     editTaskFormSubmit.addEventListener('click', handleEditTaskFormSubmit);
+
+    function handleEditTaskFormCancel() {
+        clearInputFields();
+        editTaskForm.classList.add('hidden');
+        taskProject.classList.remove('hidden');
+        refreshTaskList();
+        editTaskFormCancel.removeEventListener('click', handleEditTaskFormCancel);
+        
+    }
+
+    editTaskFormCancel.addEventListener('click', handleEditTaskFormCancel);
     
+}
+
+function refreshTaskList() {
+    const currentHomePageTitle = document.querySelector('#main-title').textContent.trim();
+    console.log(currentHomePageTitle);
+
+    switch (currentHomePageTitle) {
+        case 'Today':
+            renderTodayTaskElements();
+            break;
+
+        case 'Next 7 Days':
+            renderNext7DaysTaskElements();
+            break;
+
+        default:
+            console.log("nema ništa");
+            break;
+    }
 }
 
 
@@ -238,6 +271,8 @@ function displayTasksList(belongsTo) {
     }
 
 }
+
+
 
 function renderTodoItemDetails(event) {
     event.preventDefault();

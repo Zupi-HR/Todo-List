@@ -8,7 +8,7 @@ import { taskManager } from "./TaskProjectCreator";
 import { createTaskElement } from "./TaskFormHandler";
 
 
-function renderTaskItems() {
+export function renderTaskItems() {
    taskFormList.innerHTML = "";
    const tasksArray = taskManager.getAllTasks();
    const currentDate = new Date();
