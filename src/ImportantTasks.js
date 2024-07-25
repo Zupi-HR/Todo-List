@@ -6,17 +6,19 @@ const addTask = document.getElementById('add-task');
 import { taskManager } from "./TaskProjectCreator";
 import { createTaskElement } from "./TaskFormHandler";
 
-/*
-function renderTaskItems() {
+
+export function renderTaskItems() {
    taskFormList.innerHTML = "";
    const tasksArray = taskManager.getAllTasks();
    if (tasksArray !== undefined) {
       tasksArray.forEach((task) => {
-         if(task.)
+         if(task.important) {
+            taskFormList.appendChild(createTaskElement(task));
+         }
       })
    }
 }
-*/
+
 
 function renderImportantTasks() {
     mainTitle.textContent = importantTasks.textContent;
@@ -24,6 +26,8 @@ function renderImportantTasks() {
     if (todoTask.textContent.trim() == "") {
        todoTask.textContent = 'Yay! No Tasks!';
        return;
+    } else {
+      renderTaskItems();
     }
   }
 

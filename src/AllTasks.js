@@ -13,8 +13,8 @@ function renderTaskItem() {
   const tasksArray = taskManager.getAllTasks();
 
   if (tasksArray !== undefined) {
-   tasksArray.forEach((taskArray) => {
-    taskFormList.appendChild(createTaskElement(taskArray));
+   tasksArray.forEach((task) => {
+    taskFormList.appendChild(createTaskElement(task));
    })
   }
 }

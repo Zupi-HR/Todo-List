@@ -54,6 +54,7 @@ class TaskProject {
         this.title = title;
         this.details = details;
         this.date = date;
+        this.important = false;
     }
 }
 

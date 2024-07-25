@@ -11,9 +11,11 @@ const editTaskFormSubmit = document.getElementById('editTask-form-submit');
 const editTaskFormCancel = document.getElementById('editTask-form-cancel');
 
 import editIconImage from "./assets/edit_icon.svg";
+import importantIconImage from "./assets/important-star.png";
 import { taskManager } from "./TaskProjectCreator";
 import {renderTaskItems as renderTodayTaskElements} from "./TodayTasks";
 import { renderTaskItems as renderNext7DaysTaskElements } from "./Next7DaysTasks";
+import { renderTaskItems as renderImportantTaskElements } from "./ImportantTasks";
 let isOptionsMenuOpen = false;
 
 
@@ -44,6 +46,43 @@ function createTaskElement(item) {
     taskItemDate.textContent = (item.date !== "") ? format(item.date, 'dd/MMM/yyyy') : "";
     console.log('formatirani datum je:', taskItemDate.textContent);
     taskItemDate.classList.add('task-date');
+
+    const importantIcon = document.createElement('img');
+    importantIcon.classList.add('important-icon');
+    importantIcon.src = importantIconImage;
+
+
+    const importantIconClicked = document.createElement('div');
+   importantIconClicked.classList.add('important-icon_clicked', 'hidden');
+
+
+
+   importantIcon.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    event.currentTarget.classList.add('important-icon', 'hidden');
+    importantIconClicked.classList.remove('hidden');
+    item.important = !item.important;
+    refreshTaskList();
+})
+
+   importantIconClicked.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    importantIcon.classList.remove('hidden');
+    event.currentTarget.classList.add('important-icon_clicked', 'hidden');
+    item.important = false;
+    refreshTaskList();
+   })
+
+   if (item.important) {
+    importantIcon.classList.add('important-icon', 'hidden');
+    importantIconClicked.classList.remove('hidden');
+   }
+    
+   
 
     const editIcon = document.createElement('img');
     editIcon.src = editIconImage;
@@ -77,7 +116,7 @@ function createTaskElement(item) {
         }
     })
 
-    listTodo.append(taskItemCheckboxInput, listDetails, taskItemDate, editIcon);
+    listTodo.append(taskItemCheckboxInput, listDetails, taskItemDate, importantIcon, importantIconClicked, editIcon);
 
     return listTodo;
 
@@ -209,6 +248,9 @@ function refreshTaskList() {
             renderNext7DaysTaskElements();
             break;
 
+        case 'Important':
+             renderImportantTaskElements();
+             break;   
         default:
             console.log("nema ništa");
             break;
