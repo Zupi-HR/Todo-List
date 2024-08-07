@@ -261,17 +261,17 @@ class TaskEditFormHandler {
         editTaskFormCancel.addEventListener('click', this.handleEditTaskFormCancel);
     }
 
-    populateEditFormTask(currentID) {
+    populateEditFormTask() {
         const editTaskTitle = document.getElementById('editTaskTitle');
         const editTaskDetails = document.getElementById('editTaskDetails');
         const editTaskDate = document.getElementById('editTaskDate');
 
         const tasksArray = taskManager.getAllTasks();
 
-        console.log(tasksArray[currentID].title);
-        const currentTaskTitle = tasksArray[currentID].title;
-        const currentTaskDetails = tasksArray[currentID].details;
-        const currentTaskDate = tasksArray[currentID].date;
+        console.log(tasksArray[this.currentTaskElement.id].title);
+        const currentTaskTitle = tasksArray[this.currentTaskElement.id].title;
+        const currentTaskDetails = tasksArray[this.currentTaskElement.id].details;
+        const currentTaskDate = tasksArray[this.currentTaskElement.id].date;
 
         editTaskTitle.value = currentTaskTitle;
         editTaskDetails.value = currentTaskDetails;
