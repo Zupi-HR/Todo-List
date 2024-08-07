@@ -256,8 +256,11 @@ class TaskEditFormHandler {
         taskItemsContainer.insertBefore(editTaskForm, this.currentTaskElement)
         
         this.currentTaskElement.classList.add('hidden');
-        editTaskFormSubmit.addEventListener('click', this.handleEditTaskFormSubmit);
 
+        editTaskFormSubmit.removeEventListener('click', this.handleEditTaskFormSubmit);
+        editTaskFormSubmit.addEventListener('click', this.handleEditTaskFormSubmit);
+        
+        editTaskFormCancel.addEventListener('click', this.handleEditTaskFormCancel);
         editTaskFormCancel.addEventListener('click', this.handleEditTaskFormCancel);
     }
 
@@ -303,6 +306,7 @@ class TaskEditFormHandler {
         this.currentTaskElement.classList.remove('hidden');
         refreshTaskList();
         editTaskFormSubmit.removeEventListener('click', this.handleEditTaskFormSubmit);
+        editTaskFormCancel.removeEventListener('click', this.handleEditTaskFormCancel);
     }
 
      handleEditTaskFormCancel(event) {
