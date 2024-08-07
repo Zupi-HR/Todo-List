@@ -198,14 +198,14 @@ input[type=text] {
     background-color: var(--task-form-background-color);
 }
 
-#todos-list {
+#projects-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
     padding-left: 0px;
 }
 
-.todos-item {
+.project-item {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -214,7 +214,7 @@ input[type=text] {
     padding: 5px;
 }
 
-.todos-item:hover {
+.project-item:hover {
     background-color: #ececec;
     cursor: pointer;
 }
@@ -307,7 +307,7 @@ main {
     background-color: var(--red-color);
 }
 
-.task-form-list {
+.TaskItemsContainer {
     padding: 0;
     display: flex;
     flex-direction: column;

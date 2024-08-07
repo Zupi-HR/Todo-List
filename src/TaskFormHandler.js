@@ -5,7 +5,7 @@ const taskForm = document.getElementById('task-form');
 const addTaskBtn = document.getElementById('add-task');
 const taskFormSubmit = document.getElementById('task-form-submit');
 const taskFormCancel = document.getElementById('task-form-cancel');
-const taskFormList = document.querySelector('.task-form-list');
+const taskItemsContainer = document.querySelector('.TaskItemsContainer');
 const editTaskForm = document.getElementById('editTaskForm');
 const editTaskFormSubmit = document.getElementById('editTask-form-submit');
 const editTaskFormCancel = document.getElementById('editTask-form-cancel');
@@ -13,131 +13,311 @@ const editTaskFormCancel = document.getElementById('editTask-form-cancel');
 import editIconImage from "./assets/edit_icon.svg";
 import importantIconImage from "./assets/important-star.png";
 import { taskManager } from "./TaskProjectCreator";
-import {renderTaskItems as renderTodayTaskElements} from "./TodayTasks";
+import { renderTaskItems as renderTodayTaskElements } from "./TodayTasks";
 import { renderTaskItems as renderNext7DaysTaskElements } from "./Next7DaysTasks";
 import { renderTaskItems as renderImportantTaskElements } from "./ImportantTasks";
 let isOptionsMenuOpen = false;
 
 
-function createTaskElement(item) {
-    const listTodo = document.createElement('li');
-    listTodo.classList.add('task-item');
-    listTodo.id = item.id;
+class TaskFormManager {
+    static showForm(formElement) {
+        formElement.classList.remove('hidden');
+    }
 
-    const taskItemCheckboxInput = document.createElement('input');
-    taskItemCheckboxInput.setAttribute('type', 'checkbox');
-    taskItemCheckboxInput.id = "task-item-checkbox";
+    static hideForm(formElement) {
+        formElement.value = "";
+        formElement.classList.add('hidden');
+    }
 
-    const listDetails = document.createElement('div');
-    listDetails.classList.add('list-details');
-
-    const taskItemTitle = document.createElement('h3');
-    taskItemTitle.classList.add('task-title');
-    taskItemTitle.textContent = item.title;
-
-    const taskItemDetails = document.createElement('p');
-    taskItemDetails.textContent = item.details;
-    taskItemDetails.classList.add('task-details');
-
-    listDetails.append(taskItemTitle, taskItemDetails);
-    isTaskFinished(item, listDetails, taskItemCheckboxInput);
-
-    const taskItemDate = document.createElement('div');
-    taskItemDate.textContent = (item.date !== "") ? format(item.date, 'dd/MMM/yyyy') : "";
-    console.log('formatirani datum je:', taskItemDate.textContent);
-    taskItemDate.classList.add('task-date');
-
-    const importantIcon = document.createElement('img');
-    importantIcon.classList.add('important-icon');
-    importantIcon.src = importantIconImage;
-
-
-    const importantIconClicked = document.createElement('div');
-   importantIconClicked.classList.add('important-icon_clicked', 'hidden');
-
-
-
-   importantIcon.addEventListener('click', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    event.currentTarget.classList.add('important-icon', 'hidden');
-    importantIconClicked.classList.remove('hidden');
-    item.important = !item.important;
-    refreshTaskList();
-})
-
-   importantIconClicked.addEventListener('click', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    importantIcon.classList.remove('hidden');
-    event.currentTarget.classList.add('important-icon_clicked', 'hidden');
-    item.important = false;
-    refreshTaskList();
-   })
-
-   if (item.important) {
-    importantIcon.classList.add('important-icon', 'hidden');
-    importantIconClicked.classList.remove('hidden');
-   }
-    
-   
-
-    const editIcon = document.createElement('img');
-    editIcon.src = editIconImage;
-    editIcon.style.display = 'inline-block';
-
-    editIcon.addEventListener('click', (event) => {
+    static handleTaskFormSubmission(event) {
         event.preventDefault();
-        closeOptionsMenu();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+    
+        taskItemsContainer.innerHTML = "";
+    
+        renderTaskItem();
+        TaskFormManager.clearInputFields();
+        TaskFormManager.hideForm(taskForm);
+    
+    }
 
-        setTimeout(() => {
-            createAndAppendOptionsMenu(listTodo);
-            if (!isOptionsMenuOpen) {
-                document.querySelector('body').addEventListener('click', closeOptionsMenu);
-                isOptionsMenuOpen = true;
-            }
-        }, 300)
-    })
+    static handleTaskFormCancel(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        TaskFormManager.clearInputFields();
+        taskForm.classList.add('hidden');
+    
+    }
 
-
-    taskItemCheckboxInput.addEventListener('change', () => {
-        if (taskItemCheckboxInput.checked) {
-            item.finished = true;
-            console.log('checkboc je chekcan');
-            console.log(item.finished);
-            listDetails.classList.add('fadeColor');
-        } else {
-            item.finished = false;
-            console.log('checkbox je uncheckan');
-            console.log(item.finished);
-            listDetails.classList.remove('fadeColor');
-        }
-    })
-
-    listTodo.append(taskItemCheckboxInput, listDetails, taskItemDate, importantIcon, importantIconClicked, editIcon);
-
-    return listTodo;
-
+    static clearInputFields() {
+        const inputFields = document.querySelectorAll('.task-input-field');
+        inputFields.forEach((inputField) => {
+            inputField.value = "";
+        })
+    }
 }
 
-function createAndAppendOptionsMenu(tasksItem) {
-    const optionMenu = document.createElement('div');
-    optionMenu.classList.add("option", "tasks-option");
+class TaskElementFactory {
+    constructor(taskItem) {
+        this.taskItem = taskItem;
+    }
 
-    const editOption = document.createElement('p');
-    editOption.id = `edit-option_${tasksItem.getAttribute('task-project')}`;
-    editOption.textContent = 'Edit';
-    handleEditClick(editOption);
+    createTaskElement() {
+        const taskItemElement = document.createElement('li');
+        taskItemElement.classList.add('task-item');
+        taskItemElement.id = this.taskItem.id;
 
-    const deleteOption = document.createElement('p');
-    deleteOption.id = `delete-ootion_${tasksItem.getAttribute('task-project')}`;
-    deleteOption.textContent = 'Delete';
-    handleDeleteClick(deleteOption);
+        const taskItemCheckboxInput = this.createCheckboxElement();
+        const taskDetails = this.createTaskDetails();
+        const taskItemDate = this.createTaskDate();
+        const importantIcon = this.createImportantIcon();
+        const importantIconClicked = this.createImportantIconClicked();
+        const editIcon = this.createEditIcon();
 
-    optionMenu.append(editOption, deleteOption);
-    tasksItem.appendChild(optionMenu);
+        const checkboxEventHandler = new TaskEventHandler(taskItemCheckboxInput, this.taskItem);
+        checkboxEventHandler.attachCheckboxEvent(taskDetails);
+
+        const importantIconEventHandler = new TaskEventHandler(importantIcon, this.taskItem);
+        importantIconEventHandler.attachImportantIconEvent(importantIconClicked);
+
+        const editIconEventHandler = new TaskEventHandler(editIcon, this.taskItem);
+        editIconEventHandler.attachEditIconEvent(taskItemElement);
+
+        isTaskFinished(taskItemElement, taskDetails, taskItemCheckboxInput);
+
+        importantIconClicked.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            importantIcon.classList.remove('hidden');
+            event.currentTarget.classList.add('important-icon_clicked', 'hidden');
+            this.taskItem.important = false;
+            refreshTaskList();
+        })
+
+        if (this.taskItem.important) {
+            importantIcon.classList.add('important-icon', 'hidden');
+            importantIconClicked.classList.remove('hidden');
+        }
+
+        taskItemElement.append(taskItemCheckboxInput, taskDetails, taskItemDate, importantIcon, importantIconClicked, editIcon);
+        return taskItemElement;
+    }
+
+    createCheckboxElement() {
+        const taskItemCheckboxInput = document.createElement('input');
+        taskItemCheckboxInput.setAttribute('type', 'checkbox');
+        taskItemCheckboxInput.id = "task-item-checkbox";
+        return taskItemCheckboxInput;
+    }
+
+    createTaskDetails() {
+        const listDetails = document.createElement('div');
+        listDetails.classList.add('list-details');
+
+        const taskItemTitle = document.createElement('h3');
+        taskItemTitle.classList.add('task-title');
+        taskItemTitle.textContent = this.taskItem.title;
+
+        const taskItemDetails = document.createElement('p');
+        taskItemDetails.textContent = this.taskItem.details;
+        taskItemDetails.classList.add('task-details');
+
+        listDetails.append(taskItemTitle, taskItemDetails);
+        return listDetails;
+    }
+
+    createTaskDate() {
+        const taskItemDate = document.createElement('div');
+        taskItemDate.textContent = (this.taskItem.date !== "") ? format(this.taskItem.date, 'dd/MMM/yyyy') : "";
+        console.log('formatirani datum je:', taskItemDate.textContent);
+        taskItemDate.classList.add('task-date');
+        return taskItemDate;
+    }
+
+    createImportantIcon() {
+        const importantIcon = document.createElement('img');
+        importantIcon.classList.add('important-icon');
+        importantIcon.src = importantIconImage;
+        const attachEventHandler = new TaskEventHandler()
+        return importantIcon;
+    }
+
+    createImportantIconClicked() {
+        const importantIconClicked = document.createElement('div');
+        importantIconClicked.classList.add('important-icon_clicked', 'hidden');
+        return importantIconClicked;
+    }
+
+    createEditIcon() {
+        const editIcon = document.createElement('img');
+        editIcon.classList.add('edit-icon');
+        editIcon.src = editIconImage;
+        return editIcon;
+    }
+
+    createAndAppendOptionsMenu(taskElement) {
+        const optionsMenu = document.createElement('div');
+        optionsMenu.classList.add("option", "tasks-option", "hidden");
+
+        const editOption = document.createElement('p');
+        editOption.id = `edit-option`;
+        editOption.textContent = 'Edit';
+        const editOptionEventHandler = new TaskEventHandler();
+        editOptionEventHandler.attachTaskEditEvent(editOption);
+
+        const deleteOption = document.createElement('p');
+        deleteOption.id = `delete-option_${taskElement.id}`;
+        deleteOption.textContent = 'Delete';
+        handleDeleteClick(deleteOption);
+
+        optionsMenu.append(editOption, deleteOption);
+        return optionsMenu;
+    }
+}
+
+
+class TaskEventHandler {
+    constructor(element, taskItem) {
+        this.element = element;
+        this.taskItem = taskItem;
+    }
+
+    attachCheckboxEvent(taskDetails) {
+        this.element.addEventListener('change', () => {
+            if (this.element.checked) {
+                this.taskItem.finished = true;
+                taskDetails.classList.add('fadeColor');
+            } else {
+                this.taskItem.finished = false;
+                taskDetails.classList.remove('fadeColor');
+            }
+        })
+    }
+
+    attachImportantIconEvent(importantIconClicked) {
+        this.element.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            event.currentTarget.classList.add('important-icon', 'hidden');
+            importantIconClicked.classList.remove('hidden');
+            this.taskItem.important = !this.taskItem.important;
+            refreshTaskList();
+        })
+    }
+
+    attachEditIconEvent(taskElement) {
+        this.element.addEventListener('click', (event) => {
+            event.preventDefault();
+            closeOptionsMenu();
+
+            setTimeout(() => {
+                const optionsMenuFactory = new TaskElementFactory();
+                const optionsMenu = optionsMenuFactory.createAndAppendOptionsMenu(taskElement);
+                optionsMenu.classList.remove('hidden');
+                taskElement.appendChild(optionsMenu);
+                if (!isOptionsMenuOpen) {
+                    document.querySelector('body').addEventListener('click', closeOptionsMenu);
+                    isOptionsMenuOpen = true;
+                }
+            }, 300)
+        })
+    }
+
+    attachTaskEditEvent(editOption) {
+        editOption.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            
+            const currentTaskElement = event.currentTarget.parentNode.parentNode;
+            console.log("Parent element of clicked edit option is: ", currentTaskElement);
+            const taskEditFormHandler = new TaskEditFormHandler(currentTaskElement);
+            console.log('Edit clicked for task Element', currentTaskElement.id);
+            taskEditFormHandler.showEditFormTask();
+        })
+    }
+}
+
+class TaskEditFormHandler {
+    constructor(currentTaskElement) {
+        this.currentTaskElement = currentTaskElement;
+        this.handleEditTaskFormSubmit = this.handleEditTaskFormSubmit.bind(this);
+        this.handleEditTaskFormCancel = this.handleEditTaskFormCancel.bind(this);
+    }
+
+    showEditFormTask() {
+        console.log('Editing task element:', this.currentTaskElement.id)
+        this.populateEditFormTask(this.currentTaskElement.id);
+        editTaskForm.classList.remove('hidden');
+        taskItemsContainer.insertBefore(editTaskForm, this.currentTaskElement)
+        
+        this.currentTaskElement.classList.add('hidden');
+        editTaskFormSubmit.addEventListener('click', this.handleEditTaskFormSubmit);
+
+        editTaskFormCancel.addEventListener('click', this.handleEditTaskFormCancel);
+    }
+
+    populateEditFormTask(currentID) {
+        const editTaskTitle = document.getElementById('editTaskTitle');
+        const editTaskDetails = document.getElementById('editTaskDetails');
+        const editTaskDate = document.getElementById('editTaskDate');
+
+        const tasksArray = taskManager.getAllTasks();
+
+        console.log(tasksArray[currentID].title);
+        const currentTaskTitle = tasksArray[currentID].title;
+        const currentTaskDetails = tasksArray[currentID].details;
+        const currentTaskDate = tasksArray[currentID].date;
+
+        editTaskTitle.value = currentTaskTitle;
+        editTaskDetails.value = currentTaskDetails;
+        editTaskDate.value = currentTaskDate;
+    }
+
+    handleEditTaskFormSubmit(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        console.log('Submitting Edit for task Element: ', this.currentTaskElement.id);
+        const tasksArray = taskManager.getAllTasks();
+
+        const currentTaskTitle = this.currentTaskElement.querySelector('.task-title');
+        const currentTaskDetails = this.currentTaskElement.querySelector('.task-details');
+        const currentTaskDate = this.currentTaskElement.querySelector('.task-date');
+
+        const editTaskTitle = document.getElementById('editTaskTitle').value;
+        const editTaskDetails = document.getElementById('editTaskDetails').value;
+        const editTaskDate = document.getElementById('editTaskDate').value;
+        taskManager.editTask(this.currentTaskElement.id, editTaskTitle, editTaskDetails, editTaskDate);
+
+        currentTaskTitle.textContent = tasksArray[this.currentTaskElement.id].title;
+        currentTaskDetails.textContent = tasksArray[this.currentTaskElement.id].details;
+        currentTaskDate.textContent = (tasksArray[this.currentTaskElement.id].date !== "") ? format(tasksArray[this.currentTaskElement.id].date, 'dd/MMM/yyyy') : "";
+
+        TaskFormManager.clearInputFields();
+        editTaskForm.classList.add('hidden');
+        this.currentTaskElement.classList.remove('hidden');
+        refreshTaskList();
+        editTaskFormSubmit.removeEventListener('click', this.handleEditTaskFormSubmit);
+    }
+
+     handleEditTaskFormCancel(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        TaskFormManager.clearInputFields();
+        editTaskForm.classList.add('hidden');
+        this.currentTaskElement.classList.remove('hidden');
+        refreshTaskList();
+        console.log('Cancel editing Task Element:', this.currentTaskElement.id);
+        editTaskFormCancel.removeEventListener('click', this.handleEditTaskFormCancel);
+        editTaskFormSubmit.removeEventListener('click', this.handleEditTaskFormSubmit);
+    }
+    
 }
 
 function closeOptionsMenu() {
@@ -148,17 +328,6 @@ function closeOptionsMenu() {
     isOptionsMenuOpen = false;
 }
 
-function handleEditClick(editOption) {
-    editOption.addEventListener('click', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-
-        const parentTaskList = event.currentTarget.parentNode.parentNode;
-        console.log(parentTaskList);
-        showEditFormTask(parentTaskList)
-    })
-}
 
 function handleDeleteClick(deleteOption) {
     deleteOption.addEventListener('click', (event) => {
@@ -186,54 +355,6 @@ function updateTaskListIds(belongsTo) {
     }
 }
 
-function showEditFormTask(taskProject) {
-    function handleEditTaskFormSubmit(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        const currentTaskTitle = taskProject.querySelector('.task-title');
-        const currentTaskDetails = taskProject.querySelector('.task-details');
-        const currentTaskDate = taskProject.querySelector('.task-date');
-
-        const editTaskTitle = document.getElementById('editTaskTitle').value;
-        const editTaskDetails = document.getElementById('editTaskDetails').value;
-        const editTaskDate = document.getElementById('editTaskDate').value;
-        console.log("id od itema za editiranje u dom je: ", taskProject.id);
-        taskManager.editTask(taskProject.id, editTaskTitle, editTaskDetails, editTaskDate);
-
-       
-        console.log(tasksArray, "jeeeee");
-        currentTaskTitle.textContent = tasksArray[taskProject.id].title;
-        currentTaskDetails.textContent = tasksArray[taskProject.id].details;
-        currentTaskDate.textContent = (tasksArray[taskProject.id].date !== "") ? format(tasksArray[taskProject.id].date, 'dd/MMM/yyyy') : "";
-        
-        clearInputFields();
-        editTaskForm.classList.add('hidden');
-        taskProject.classList.remove('hidden');
-        refreshTaskList();
-        editTaskFormSubmit.removeEventListener('click', handleEditTaskFormSubmit);
-        console.log(taskProject);
-    }
-
-    editTaskForm.classList.remove('hidden');
-    taskFormList.insertBefore(editTaskForm, taskProject);
-    taskProject.classList.add('hidden');
-    const tasksArray = taskManager.getAllTasks();
-    populateEditFormTask(tasksArray, taskProject.id);
-    editTaskFormSubmit.addEventListener('click', handleEditTaskFormSubmit);
-
-    function handleEditTaskFormCancel() {
-        clearInputFields();
-        editTaskForm.classList.add('hidden');
-        taskProject.classList.remove('hidden');
-        refreshTaskList();
-        editTaskFormCancel.removeEventListener('click', handleEditTaskFormCancel);
-        
-    }
-
-    editTaskFormCancel.addEventListener('click', handleEditTaskFormCancel);
-    
-}
 
 function refreshTaskList() {
     const currentHomePageTitle = document.querySelector('#main-title').textContent.trim();
@@ -249,8 +370,8 @@ function refreshTaskList() {
             break;
 
         case 'Important':
-             renderImportantTaskElements();
-             break;   
+            renderImportantTaskElements();
+            break;
         default:
             console.log("nema ništa");
             break;
@@ -288,39 +409,37 @@ function isTaskFinished(task, elementToFade, checkbox) {
 
 
 function renderTaskItem() {
-    taskFormList.innerHTML = "";
+    taskItemsContainer.innerHTML = "";
     const inputTitle = document.getElementById('title').value;
     const inputDetails = document.getElementById('details').value;
-    const inputDate =  document.getElementById('date').value;
+    const inputDate = document.getElementById('date').value;
     const currentProject = document.querySelector(`[data-project="${taskForm.getAttribute('belongs_to')}"]`);
     const belongsTo = currentProject.querySelector('p').textContent;
     console.log(belongsTo);
     const tasksArray = taskManager.createTask(belongsTo, inputTitle, inputDetails, inputDate);
-    tasksArray.forEach((taskItem) => {
-        taskFormList.appendChild(createTaskElement(taskItem));
+    tasksArray.forEach((taskItemElement) => {
+        const newFactory = new TaskElementFactory(taskItemElement);
+        taskItemsContainer.appendChild(newFactory.createTaskElement());
     })
 
     console.log(inputTitle, inputDetails, inputDate);
 }
 
 function displayTasksList(belongsTo) {
-    taskFormList.innerHTML = "";
+    taskItemsContainer.innerHTML = "";
     const tasksArray = taskManager.getTasks(belongsTo);
     if (tasksArray !== undefined) {
-        tasksArray.forEach((taskItem) => {
-            taskFormList.appendChild(createTaskElement(taskItem));
+        tasksArray.forEach((taskItemElement) => {
+            taskItemsContainer.appendChild(createTaskElement(taskItemElement));
         })
     }
 
 }
 
-
-
 function renderTodoItemDetails(event) {
     event.preventDefault();
     event.stopPropagation();
     const projectID = parseInt(event.currentTarget.getAttribute('data-project'));
-    console.log("projectID je:", projectID);
     mainTitle.textContent = event.currentTarget.querySelector('p').textContent;
     displayTasksList(event.currentTarget.querySelector('p').textContent);
     addTaskBtn.setAttribute('belongs_to', projectID);
@@ -330,46 +449,60 @@ function renderTodoItemDetails(event) {
 addTaskBtn.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
-    taskForm.classList.remove('hidden');
+    TaskFormManager.showForm(taskForm);
 
     const addTaskCurrentID = event.currentTarget.getAttribute('belongs_to');
     taskForm.setAttribute('belongs_to', addTaskCurrentID);
 })
 
-function handleTaskFormSubmission(event) {
-    taskForm.classList.remove('hidden');
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+/*
+function showEditFormTask(taskProject) {
+    function handleEditTaskFormSubmit(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        const currentTaskTitle = taskProject.querySelector('.task-title');
+        const currentTaskDetails = taskProject.querySelector('.task-details');
+        const currentTaskDate = taskProject.querySelector('.task-date');
 
-    taskFormList.innerHTML = "";
+        const editTaskTitle = document.getElementById('editTaskTitle').value;
+        const editTaskDetails = document.getElementById('editTaskDetails').value;
+        const editTaskDate = document.getElementById('editTaskDate').value;
+        console.log("id od itema za editiranje u dom je: ", taskProject.id);
+        taskManager.editTask(taskProject.id, editTaskTitle, editTaskDetails, editTaskDate);
 
-    renderTaskItem();
-    clearInputFields();
-    taskForm.classList.add('hidden');
+
+        console.log(tasksArray, "jeeeee");
+        currentTaskTitle.textContent = tasksArray[taskProject.id].title;
+        currentTaskDetails.textContent = tasksArray[taskProject.id].details;
+        currentTaskDate.textContent = (tasksArray[taskProject.id].date !== "") ? format(tasksArray[taskProject.id].date, 'dd/MMM/yyyy') : "";
+
+        clearInputFields();
+        editTaskForm.classList.add('hidden');
+        taskProject.classList.remove('hidden');
+        refreshTaskList();
+        editTaskFormSubmit.removeEventListener('click', handleEditTaskFormSubmit);
+        console.log(taskProject);
+    }
+
+    editTaskForm.classList.remove('hidden');
+    taskItemsContainer.insertBefore(editTaskForm, taskProject);
+    taskProject.classList.add('hidden');
+    const tasksArray = taskManager.getAllTasks();
+    populateEditFormTask(tasksArray, taskProject.id);
+    editTaskFormSubmit.addEventListener('click', handleEditTaskFormSubmit);
+
+   
+
+    editTaskFormCancel.addEventListener('click', handleEditTaskFormCancel);
 
 }
-
-function handleTaskFormCancel(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    clearInputFields();
-    taskForm.classList.add('hidden');
-
-}
+    */
 
 
-function clearInputFields() {
-    const inputFields = document.querySelectorAll('.task-input-field');
-    inputFields.forEach((inputField) => {
-        inputField.value = "";
-    })
-}
-
-taskFormSubmit.addEventListener('click', handleTaskFormSubmission);
-taskFormCancel.addEventListener('click', handleTaskFormCancel);
+taskFormSubmit.addEventListener('click', TaskFormManager.handleTaskFormSubmission);
+//taskFormCancel.addEventListener('click', TaskFormManager.handleTaskFormCancel);
 
 
 
-export { renderTodoItemDetails, addTaskBtn, createTaskElement }
+export { renderTodoItemDetails, /*addTaskBtn, createTaskElement*/ }

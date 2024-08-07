@@ -41,7 +41,7 @@
         </div>
       </form>
       <h2>Projects</h2>
-      <ul id="todos-list"></ul>
+      <ul id="projects-list"></ul>
     </ul>
     <form id="project-form" class="hidden" action="">
       <img class="density-icon" src="" alt="">
@@ -74,14 +74,14 @@
           placeholder="eg: I'm just gonna procrastinate, aren't I?">
 
         <label for="editTaskDate">Date: </label>
-        <input type="date" id="editTaskDate" class="task-input-field" required>
+        <input type="date" id="editTaskDate" class="task-input-field" name="date" required>
         <div class="editTask-form-buttons">
           <input type="submit" id="editTask-form-submit" class="task-form-btn" value="Add">
           <input type="button" id="editTask-form-cancel" class="task-form-btn" value="Cancel">
         </div>
       </form>
 
-      <ul class="task-form-list">
+      <ul class="TaskItemsContainer">
 
       </ul>
       <form id="task-form" class="hidden" action="">

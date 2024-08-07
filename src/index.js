@@ -5,7 +5,7 @@ import renderAllTasks from './AllTasks';
 import renderTodayTasks from './TodayTasks';
 import renderNext7DaysTasks from './Next7DaysTasks';
 import renderImportantTasks from './ImportantTasks';
-import {showProjectForm} from './ProjectFormHandler';
+import {ProjectFormManager} from './ProjectDOMHandler';
 
 
 
@@ -13,6 +13,7 @@ const navItemsContainer = document.querySelector('ul');
 const submitBTN = document.querySelector('.submit_btn');
 
 const addProject = document.getElementById('add-project');
+const projectForm = document.getElementById('project-form');
 
 
 navItemsContainer.addEventListener('click', function (event) {
@@ -35,7 +36,10 @@ navItemsContainer.addEventListener('click', function (event) {
     }
 })
 
-addProject.addEventListener('click', showProjectForm);
+addProject.addEventListener('click', (event) => {
+    event.preventDefault();
+    ProjectFormManager.showForm(projectForm);
+});
 
 
 
