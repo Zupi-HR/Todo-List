@@ -14,6 +14,10 @@ class ProjectManager {
 
     updateProjectName(id, newName) {
         if (this.projects[id]) {
+            const tasksToUpdate = taskManager.getTasks(this.projects[id].name);
+             tasksToUpdate.map((task) => {
+                task.belongsTo = newName;
+             })
             this.projects[id].name = newName;
             console.log(this.projects[id].name, "exist");
         } else {
