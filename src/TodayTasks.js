@@ -2,11 +2,10 @@ import { formatDistance, subDays, compareAsc, isToday } from "date-fns";
 const mainTitle = document.getElementById('main-title');
 const todoTask = document.getElementById('todo-task');
 const todayTasks = document.getElementById('today');
-const taskFormList = document.querySelector('.task-form-list');
+const taskFormList = document.querySelector('.TaskItemsContainer');
 const addTask = document.getElementById('add-task');
 import { taskManager } from "./TaskProjectCreator";
-import { createTaskElement } from "./TaskFormHandler";
-
+import { TaskElementFactory } from "./TaskFormHandler";
 
 export function renderTaskItems() {
     taskFormList.innerHTML = "";
@@ -14,9 +13,10 @@ export function renderTaskItems() {
 
 
     if (tasksArray !== undefined) {
-        tasksArray.forEach((taskArray) => {
-            if (isToday(taskArray.date)) {
-                taskFormList.appendChild(createTaskElement(taskArray));
+        tasksArray.forEach((task) => {
+            if (isToday(task.date)) {
+                const newFactory = new TaskElementFactory(task);
+                taskFormList.appendChild(newFactory.createTaskElement());
             }
         })
     }

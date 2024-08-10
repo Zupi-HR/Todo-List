@@ -1,10 +1,10 @@
 const mainTitle = document.getElementById('main-title');
 const todoTask = document.getElementById('todo-task');
 const allTasks = document.getElementById('all-tasks');
-const taskFormList = document.querySelector('.task-form-list');
+const taskFormList = document.querySelector('.TaskItemsContainer');
 const addTask = document.getElementById('add-task');
 import { taskManager } from "./TaskProjectCreator";
-import { createTaskElement } from "./TaskFormHandler";
+import { TaskElementFactory } from "./TaskFormHandler";
 
 
 
@@ -14,7 +14,8 @@ function renderTaskItem() {
 
   if (tasksArray !== undefined) {
    tasksArray.forEach((task) => {
-    taskFormList.appendChild(createTaskElement(task));
+    const newFactory = new TaskElementFactory(task);
+    taskFormList.appendChild(newFactory.createTaskElement());
    })
   }
 }

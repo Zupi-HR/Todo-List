@@ -1,10 +1,10 @@
 const mainTitle = document.getElementById('main-title');
 const todoTask = document.getElementById('todo-task');
 const importantTasks = document.getElementById('important');
-const taskFormList = document.querySelector('.task-form-list');
+const taskFormList = document.querySelector('.TaskItemsContainer');
 const addTask = document.getElementById('add-task');
 import { taskManager } from "./TaskProjectCreator";
-import { createTaskElement } from "./TaskFormHandler";
+import { TaskElementFactory } from "./TaskFormHandler";
 
 
 export function renderTaskItems() {
@@ -12,8 +12,9 @@ export function renderTaskItems() {
    const tasksArray = taskManager.getAllTasks();
    if (tasksArray !== undefined) {
       tasksArray.forEach((task) => {
-         if(task.important) {
-            taskFormList.appendChild(createTaskElement(task));
+         if (task.important) {
+            const newFactory = new TaskElementFactory(task);
+            taskFormList.appendChild(newFactory.createTaskElement());
          }
       })
    }
@@ -21,14 +22,14 @@ export function renderTaskItems() {
 
 
 function renderImportantTasks() {
-    mainTitle.textContent = importantTasks.textContent;
-    addTask.classList.add('hidden');
-    if (todoTask.textContent.trim() == "") {
-       todoTask.textContent = 'Yay! No Tasks!';
-       return;
-    } else {
+   mainTitle.textContent = importantTasks.textContent;
+   addTask.classList.add('hidden');
+   if (todoTask.textContent.trim() == "") {
+      todoTask.textContent = 'Yay! No Tasks!';
+      return;
+   } else {
       renderTaskItems();
-    }
-  }
+   }
+}
 
-  export default renderImportantTasks;
+export default renderImportantTasks;

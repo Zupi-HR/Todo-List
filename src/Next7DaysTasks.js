@@ -2,10 +2,10 @@ const { addDays, isToday, differenceInCalendarDays } = require("date-fns");
 const mainTitle = document.getElementById('main-title');
 const todoTask = document.getElementById('todo-task');
 const next7DaysTasks = document.getElementById('next-7-days');
-const taskFormList = document.querySelector('.task-form-list');
+const taskFormList = document.querySelector('.TaskItemsContainer');
 const addTask = document.getElementById('add-task');
 import { taskManager } from "./TaskProjectCreator";
-import { createTaskElement } from "./TaskFormHandler";
+import { TaskElementFactory } from "./TaskFormHandler";
 
 
 export function renderTaskItems() {
@@ -15,9 +15,10 @@ export function renderTaskItems() {
    const next7daysFromCurrentDate = addDays(currentDate, 7);
 
    if (tasksArray !== undefined) {
-      tasksArray.forEach((taskArray) => {
-         if (differenceInCalendarDays(taskArray.date, currentDate) > 0 && differenceInCalendarDays(taskArray.date, currentDate) < 8) {
-            taskFormList.appendChild(createTaskElement(taskArray));
+      tasksArray.forEach((task) => {
+         if (differenceInCalendarDays(task.date, currentDate) > 0 && differenceInCalendarDays(task.date, currentDate) < 8) {
+            const newFactory = new TaskElementFactory(task);
+            taskFormList.appendChild(newFactory.createTaskElement());
          }
       })
    }

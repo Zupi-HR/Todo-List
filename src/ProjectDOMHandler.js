@@ -2,7 +2,7 @@
 import projectItemIcon from "./assets/materials_icon.svg"
 import editIconImage from "./assets/edit_icon.svg";
 import { projectManager } from "./ProjectLogic";
-import { renderTodoItemDetails, addTaskBtn } from "./TaskFormHandler";
+import { renderProjectTasks, addTaskBtn } from "./TaskFormHandler";
 import { taskManager } from "./ProjectLogic";
 
 const projectForm = document.getElementById('project-form');
@@ -205,7 +205,7 @@ class ProjectElementFactory {
         editIcon.classList.add('projectEditIcon');
 
         projectElement.append(projectIcon, projectName, editIcon);
-        projectElement.addEventListener('click', renderTodoItemDetails);
+        projectElement.addEventListener('click', renderProjectTasks);
         return projectElement;
     }
 }
@@ -457,8 +457,8 @@ function createTodoItemElement(item) {
     })
 
     todoItem.append(todoIcon, todoName, editIcon);
-    todoItem.removeEventListener('click', renderTodoItemDetails);
-    todoItem.addEventListener('click', renderTodoItemDetails);
+    todoItem.removeEventListener('click', renderProjectTasks);
+    todoItem.addEventListener('click', renderProjectTasks);
     return todoItem;
 }
 //Function to create and append the options menu to a todo item element
