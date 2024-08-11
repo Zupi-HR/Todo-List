@@ -342,6 +342,7 @@ class TaskEditFormHandler {
         event.stopPropagation();
         event.stopImmediatePropagation();
         TaskFormManager.clearInputFields();
+        document.getElementById('todo-task').insertBefore(editTaskForm, taskItemsContainer);
         editTaskForm.classList.add('hidden');
         this.currentTaskElement.classList.remove('hidden');
         refreshTaskList();

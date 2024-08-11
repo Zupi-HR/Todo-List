@@ -81,7 +81,7 @@ class ProjectElementHandler {
     }
 
     handleEditProject(event) {
-        event.preventDefault();
+        event.preventDefault(); 
         this.closeAllOptionsMenu();
         setTimeout(() => {
             isOptionsMenuOpen = true;
