@@ -3,33 +3,31 @@ import { taskManager } from "./TaskProjectCreator";
 
 class ProjectManager {
     constructor() {
-        this.projects = [];
+        this.projects = this.getProjects() || [];
     }
     addProject(projectName) {
         const newProject = new ProjectItem(projectName);
         this.projects.push(newProject);
         this.refreshProjectIDs();
-
-        return this.projects;
+        localStorage.setItem("projects", JSON.stringify(this.projects));
+        return this.getProjects();
     }
 
     updateProjectName(id, newName) {
+        this.projects = this.getProjects();
         if (this.projects[id]) {
             const tasksToUpdate = taskManager.getTasks(this.projects[id].name);
-             tasksToUpdate.map((task) => {
+            tasksToUpdate.map((task) => {
                 task.belongsTo = newName;
-             })
-            this.projects[id].name = newName;
+            })
             console.log(this.projects[id].name, "exist");
+            this.projects[id].name = newName;
+            localStorage.setItem('projects', JSON.stringify(this.projects));
         } else {
             console.error(`Project with ID: ${id} not found`);
         }
 
     }
-
-    populateLocalStorage(projects) {
-        
-    } 
 
     removeProjectById(id, belongsTo) {
         if (this.projects[id]) {
@@ -43,7 +41,8 @@ class ProjectManager {
     }
 
     getProjects() {
-        return this.projects;
+        console.log(JSON.parse(localStorage.getItem('projects')));
+        return JSON.parse(localStorage.getItem('projects')) || [];
     }
 
     refreshProjectIDs() {

@@ -22,31 +22,8 @@ const taskFormList = document.querySelector('.task-form-list');
 let domElements = [];
 let isOptionsMenuOpen = false;
 
-function storageAvailable(type) {
-    let storage;
-    try {
-      storage = window[type];
-      const x = "__storage_test__";
-      storage.setItem(x, x);
-      storage.removeItem(x);
-      return true;
-    } catch (e) {
-      return (
-        e instanceof DOMException &&
-        e.name === "QuotaExceededError" &&
-        // acknowledge QuotaExceededError only if there's something already stored
-        storage &&
-        storage.length !== 0
-      );
-    }
-  }
-  
-  if (storageAvailable("localStorage")) {
-    console.log('Yippee! We can use localStorage awesomeness');
-  } else {
-    console.log('Too bad, no localStorage for us');
-  }
-  
+
+
 
 
 class ProjectFormManager {
@@ -107,7 +84,7 @@ class ProjectElementHandler {
     }
 
     handleEditProject(event) {
-        event.preventDefault(); 
+        event.preventDefault();
         this.closeAllOptionsMenu();
         setTimeout(() => {
             isOptionsMenuOpen = true;
@@ -148,7 +125,7 @@ class ProjectElementHandler {
 
     };
 
-    
+
     closeAllOptionsMenu() {
         console.log('close up opcija radi');
         document.querySelectorAll('.project-option').forEach((element) => {
@@ -171,9 +148,19 @@ class ProjectElementHandler {
 
 function handleProjectFormSubmission(event) {
     event.preventDefault();
-    domElements = [];
-    projectsList.innerHTML = "";
+    projectsList.innerHTML = ""; 
     const projects = projectManager.addProject(projectFormInput.value);
+    console.log(projects);
+
+   createAndRenderProjects(projects);
+    projectFormInput.value = "";
+    ProjectFormManager.hideForm(projectForm);
+}
+
+
+
+function createAndRenderProjects(projects) {
+    domElements = [];
     projects.forEach(({ id, name }) => {
         const newFactory = new ProjectElementFactory(id, name);
         domElements.push(newFactory.createProjectElement());
@@ -182,8 +169,6 @@ function handleProjectFormSubmission(event) {
         projectsList.appendChild(domElements[id]);
     });
     console.log(domElements);
-    projectFormInput.value = "";
-    ProjectFormManager.hideForm(projectForm);
 }
 
 projectFormSubmitBTN.addEventListener('click', handleProjectFormSubmission);
@@ -228,5 +213,36 @@ renameCancelButton.addEventListener('click', (event) => {
 })
 
 
+function storageAvailable(type) {
+    let storage;
+    try {
+        storage = window[type];
+        const x = "__storage_test__";
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    } catch (e) {
+        return (
+            e instanceof DOMException &&
+            e.name === "QuotaExceededError" &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            storage &&
+            storage.length !== 0
+        );
+    }
+}
+
+ document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.length != 0) {
+        createAndRenderProjects(projectManager.getProjects());
+    }
+ })
+
+if (storageAvailable("localStorage") && (localStorage.length != 0)) {
+    console.log('Yippee! We can use localStorage awesomeness');
+   
+} else {
+    console.log('Too bad, no localStorage for us');
+}
 
 export { ProjectFormManager };
