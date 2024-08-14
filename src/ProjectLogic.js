@@ -9,6 +9,7 @@ class ProjectManager {
         const newProject = new ProjectItem(projectName);
         this.projects.push(newProject);
         this.refreshProjectIDs();
+
         return this.projects;
     }
 
@@ -25,6 +26,10 @@ class ProjectManager {
         }
 
     }
+
+    populateLocalStorage(projects) {
+        
+    } 
 
     removeProjectById(id, belongsTo) {
         if (this.projects[id]) {
