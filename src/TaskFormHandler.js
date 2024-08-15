@@ -507,4 +507,4 @@ taskFormCancel.addEventListener('click', TaskFormManager.handleTaskFormCancel);
 
 
 
-export { renderProjectTasks, /*addTaskBtn, createTaskElement*/ TaskElementFactory}
+export { renderProjectTasks, /* createTaskElement*/ TaskElementFactory, addTaskBtn}

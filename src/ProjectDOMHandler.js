@@ -17,7 +17,7 @@ const renameProjectInput = document.getElementById('rename-input');
 const renameSubmitButton = document.getElementById('rename-submit-btn');
 const renameCancelButton = document.getElementById('rename-cancel-btn');
 const mainTitle = document.getElementById('main-title');
-const taskFormList = document.querySelector('.task-form-list');
+const taskItemsContainer = document.querySelector('.TaskItemsContainer');
 
 let domElements = [];
 let isOptionsMenuOpen = false;
@@ -119,6 +119,22 @@ class ProjectElementHandler {
         const deleteOption = document.createElement("p");
         deleteOption.id = `delete-project`;
         deleteOption.textContent = "Delete";
+        deleteOption.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            const clickedDeleteButton = event.currentTarget;
+            const projectId = clickedDeleteButton.parentNode.parentNode.getAttribute('data-project');
+            const textContent = clickedDeleteButton.parentNode.parentNode.querySelector('p').textContent;
+            projectManager.removeProjectById(projectId, textContent);
+            console.log(projectId);
+            clickedDeleteButton.parentNode.parentNode.remove();
+            deleteAllTasks();
+            mainTitle.textContent = "No Project Selected";
+            //  addTaskBtn.removeAttribute('belongs_to');
+            addTaskBtn.classList.add('hidden');
+            updateProjectListIDs();
+        })
 
         optionsMenu.append(renameOption, deleteOption);
         return optionsMenu;
@@ -146,13 +162,28 @@ class ProjectElementHandler {
 
 }
 
+function deleteAllTasks() {
+    while (taskItemsContainer.firstChild) {
+        taskItemsContainer.removeChild(taskItemsContainer.firstChild);
+    }
+}
+
+function updateProjectListIDs() {
+    const projectsArray = projectManager.getProjects();  // Fetch the list of projects from projectManager
+    const projectElements = document.querySelectorAll('.project-item');  // Select all project elements in the DOM
+
+    for (let index = 0; index < projectsArray.length; index++) {
+        projectElements[index].setAttribute("data-project", projectsArray[index].id);  // Update each DOM element with the corresponding project's ID
+    }
+}
+
 function handleProjectFormSubmission(event) {
     event.preventDefault();
-    projectsList.innerHTML = ""; 
+    projectsList.innerHTML = "";
     const projects = projectManager.addProject(projectFormInput.value);
     console.log(projects);
 
-   createAndRenderProjects(projects);
+    createAndRenderProjects(projects);
     projectFormInput.value = "";
     ProjectFormManager.hideForm(projectForm);
 }
@@ -232,15 +263,15 @@ function storageAvailable(type) {
     }
 }
 
- document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.length != 0) {
         createAndRenderProjects(projectManager.getProjects());
     }
- })
+})
 
 if (storageAvailable("localStorage") && (localStorage.length != 0)) {
     console.log('Yippee! We can use localStorage awesomeness');
-   
+
 } else {
     console.log('Too bad, no localStorage for us');
 }
