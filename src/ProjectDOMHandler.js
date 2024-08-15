@@ -189,6 +189,12 @@ function handleProjectFormSubmission(event) {
 }
 
 
+function handleProjectFormCancel(event) {
+    event.preventDefault();
+    projectFormInput.value = "";
+    ProjectFormManager.hideForm(projectForm);
+}
+
 
 function createAndRenderProjects(projects) {
     domElements = [];
@@ -201,8 +207,11 @@ function createAndRenderProjects(projects) {
     });
     console.log(domElements);
 }
-
+projectFormSubmitBTN.removeEventListener('click', handleProjectFormSubmission);
 projectFormSubmitBTN.addEventListener('click', handleProjectFormSubmission);
+
+projectFormCancelBTN.removeEventListener('click', handleProjectFormCancel);
+projectFormCancelBTN.addEventListener('click', handleProjectFormCancel);
 
 renameSubmitButton.addEventListener('click', (event) => {
     event.preventDefault();
