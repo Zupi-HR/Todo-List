@@ -33,13 +33,13 @@ class TaskFormManager {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
-    
+
         taskItemsContainer.innerHTML = "";
-    
+
         renderTaskItem();
         TaskFormManager.clearInputFields();
         TaskFormManager.hideForm(taskForm);
-    
+
     }
 
     static handleTaskFormCancel(event) {
@@ -91,9 +91,9 @@ class TaskElementFactory {
             event.preventDefault();
             event.stopPropagation();
             event.stopImmediatePropagation();
+            taskManager.updateTaskImportantProperty(event.currentTarget.parentNode.id);
             importantIcon.classList.remove('hidden');
             event.currentTarget.classList.add('important-icon_clicked', 'hidden');
-            this.taskItem.important = false;
             refreshTaskList();
         })
 
@@ -192,7 +192,7 @@ class TaskEventHandler {
                 console.log(taskItemArray);
                 taskItemArray.finished = true;
                 taskDetails.classList.add('fadeColor');
-                
+
             } else {
                 console.log(taskItemArray);
                 taskItemArray.finished = false;
@@ -206,9 +206,9 @@ class TaskEventHandler {
             event.preventDefault();
             event.stopPropagation();
             event.stopImmediatePropagation();
+            taskManager.updateTaskImportantProperty(event.currentTarget.parentNode.id);
             event.currentTarget.classList.add('important-icon', 'hidden');
             importantIconClicked.classList.remove('hidden');
-            this.taskItem.important = !this.taskItem.important;
             refreshTaskList();
         })
     }
@@ -236,7 +236,7 @@ class TaskEventHandler {
             event.preventDefault();
             event.stopPropagation();
             event.stopImmediatePropagation();
-            
+
             const currentTaskElement = event.currentTarget.parentNode.parentNode;
             console.log("Parent element of clicked edit option is: ", currentTaskElement);
             const taskEditFormHandler = new TaskEditFormHandler(currentTaskElement);
@@ -245,7 +245,7 @@ class TaskEventHandler {
         })
     }
 
-     attachTaskDeleteEvent() {
+    attachTaskDeleteEvent() {
         this.element.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -275,14 +275,14 @@ class TaskEditFormHandler {
         ensureEditFormPresence();
         editTaskForm.classList.remove('hidden');
         this.populateEditFormTask();
-        
+
         taskItemsContainer.insertBefore(editTaskForm, this.currentTaskElement)
-        
+
         this.currentTaskElement.classList.add('hidden');
 
         editTaskFormSubmit.removeEventListener('click', this.handleEditTaskFormSubmit);
         editTaskFormSubmit.addEventListener('click', this.handleEditTaskFormSubmit);
-        
+
         editTaskFormCancel.removeEventListener('click', this.handleEditTaskFormCancel);
         editTaskFormCancel.addEventListener('click', this.handleEditTaskFormCancel);
     }
@@ -298,7 +298,7 @@ class TaskEditFormHandler {
         const currentTaskTitle = tasksArray[this.currentTaskElement.id].title;
         const currentTaskDetails = tasksArray[this.currentTaskElement.id].details;
         const currentTaskDate = tasksArray[this.currentTaskElement.id].date;
-         
+
         console.log(editTaskTitle);
         console.log(editTaskDetails);
         console.log(editTaskDate);
@@ -337,7 +337,7 @@ class TaskEditFormHandler {
         editTaskFormCancel.removeEventListener('click', this.handleEditTaskFormCancel);
     }
 
-     handleEditTaskFormCancel(event) {
+    handleEditTaskFormCancel(event) {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -351,7 +351,7 @@ class TaskEditFormHandler {
         editTaskFormSubmit.removeEventListener('click', this.handleEditTaskFormSubmit);
         closeOptionsMenu();
     }
-    
+
 }
 
 function closeOptionsMenu() {
@@ -440,7 +440,7 @@ function isTaskFinished(taskItemArray, elementToFade, checkbox) {
         checkbox.checked = false;
     }
 }
-    
+
 
 function renderTaskItem() {
     taskItemsContainer.innerHTML = "";
@@ -507,4 +507,4 @@ taskFormCancel.addEventListener('click', TaskFormManager.handleTaskFormCancel);
 
 
 
-export { renderProjectTasks, /* createTaskElement*/ TaskElementFactory, addTaskBtn}
+export { renderProjectTasks, /* createTaskElement*/ TaskElementFactory, addTaskBtn }
