@@ -143,7 +143,6 @@ class ProjectElementHandler {
 
 
     closeAllOptionsMenu() {
-        console.log('close up opcija radi');
         document.querySelectorAll('.project-option').forEach((element) => {
             element.remove();
         })
@@ -222,7 +221,6 @@ renameSubmitButton.addEventListener('click', (event) => {
     console.log(projects);
     projects.forEach((project) => {
         if (project.classList.contains('hidden')) {
-            console.log('bfddfsfd');
             projectManager.updateProjectName(project.getAttribute('data-project'), inputValue);
             const projectElementHandler = new ProjectElementHandler(project);
             projectElementHandler.renameProjectElement(inputValue);

@@ -132,7 +132,6 @@ class TaskElementFactory {
     createTaskDate() {
         const taskItemDate = document.createElement('div');
         taskItemDate.textContent = (this.taskItem.date !== "") ? format(this.taskItem.date, 'dd/MMM/yyyy') : "";
-        console.log('formatirani datum je:', taskItemDate.textContent);
         taskItemDate.classList.add('task-date');
         return taskItemDate;
     }
@@ -189,13 +188,13 @@ class TaskEventHandler {
     attachCheckboxEvent(taskDetails, taskItemArray) {
         this.element.addEventListener('change', () => {
             if (this.element.checked) {
-                console.log(taskItemArray);
-                taskItemArray.finished = true;
+                console.log(this.element.parentNode.id);
+                taskManager.setTaskFinishedStatus(this.element.parentNode.id, true);
                 taskDetails.classList.add('fadeColor');
 
             } else {
-                console.log(taskItemArray);
-                taskItemArray.finished = false;
+                console.log(this.element.parentNode.id);
+                taskManager.setTaskFinishedStatus(this.element.parentNode.id, false);
                 taskDetails.classList.remove('fadeColor');
             }
         })
@@ -252,10 +251,8 @@ class TaskEventHandler {
             event.stopImmediatePropagation();
             console.log('working with:', this.element, this.taskItem);
             const taskID = this.taskItem.id;
-            console.log('id za brisat je:', taskID);
             const belongsToID = addTaskBtn.getAttribute('belongs_to');
             const belongsTo = document.querySelector(`.project-item[data-project="${belongsToID}"]`).querySelector('p').textContent;
-            console.log('aktivan projekt je', belongsTo);
             taskManager.deleteTaskById(taskID);
             event.currentTarget.parentNode.parentNode.remove();
             updateTaskListIds(belongsTo);
@@ -313,7 +310,6 @@ class TaskEditFormHandler {
         event.stopPropagation();
         event.stopImmediatePropagation();
         console.log('Submitting Edit for task Element: ', this.currentTaskElement.id);
-        const tasksArray = taskManager.getAllTasks();
 
         const currentTaskTitle = this.currentTaskElement.querySelector('.task-title');
         const currentTaskDetails = this.currentTaskElement.querySelector('.task-details');
@@ -323,7 +319,9 @@ class TaskEditFormHandler {
         const editTaskDetails = document.getElementById('editTaskDetails').value;
         const editTaskDate = document.getElementById('editTaskDate').value;
         taskManager.editTask(this.currentTaskElement.id, editTaskTitle, editTaskDetails, editTaskDate);
-
+         
+        const tasksArray = taskManager.getAllTasks();
+        console.log(tasksArray[this.currentTaskElement.id].title);
         currentTaskTitle.textContent = tasksArray[this.currentTaskElement.id].title;
         currentTaskDetails.textContent = tasksArray[this.currentTaskElement.id].details;
         currentTaskDate.textContent = (tasksArray[this.currentTaskElement.id].date !== "") ? format(tasksArray[this.currentTaskElement.id].date, 'dd/MMM/yyyy') : "";
@@ -369,10 +367,8 @@ function handleDeleteClick(deleteOption) {
         event.stopPropagation();
         event.stopImmediatePropagation();
         const taskID = event.currentTarget.parentNode.parentNode.id;
-        console.log('id za brisat je:', taskID);
         const belongsToID = addTaskBtn.getAttribute('belongs_to');
         const belongsTo = document.querySelector(`.todos-item[data-project="${belongsToID}"]`).querySelector('p').textContent;
-        console.log('aktivan projekt je', belongsTo);
         taskManager.deleteTaskById(taskID);
         event.currentTarget.parentNode.parentNode.remove();
         updateTaskListIds(belongsTo);
@@ -381,7 +377,6 @@ function handleDeleteClick(deleteOption) {
 
 function updateTaskListIds(belongsTo) {
     const taskArray = taskManager.getTasks(belongsTo);
-    console.log("taskarray filteran je", taskArray);
     const taskElements = document.querySelectorAll('.task-item');
     console.log(taskElements);
     for (let index = 0; index < taskArray.length; index++) {
@@ -407,7 +402,7 @@ function refreshTaskList() {
             renderImportantTaskElements();
             break;
         default:
-            console.log("nema ništa");
+            console.log("nothing");
             break;
     }
 }

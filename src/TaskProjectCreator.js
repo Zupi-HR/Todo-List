@@ -17,6 +17,13 @@ class TaskManager {
         this.tasks[id].title = title;
         this.tasks[id].details = details;
         this.tasks[id].date = date;
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));
+    }
+
+    setTaskFinishedStatus(id, value) {
+       this.tasks = this.getAllTasks();
+       this.tasks[id].finished = value;
+       localStorage.setItem('tasks', JSON.stringify(this.tasks));
     }
 
     deleteTaskById(id) {
