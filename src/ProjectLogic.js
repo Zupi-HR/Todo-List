@@ -20,7 +20,7 @@ class ProjectManager {
             tasksToUpdate.map((task) => {
                 if (task.belongsTo == this.projects[id].name) {
                      task.belongsTo = newName;
-                } 
+                }
             })
             localStorage.setItem('tasks', JSON.stringify(tasksToUpdate));
             console.log(this.projects[id].name, "exist");
