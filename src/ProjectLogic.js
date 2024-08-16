@@ -16,10 +16,13 @@ class ProjectManager {
     updateProjectName(id, newName) {
         this.projects = this.getProjects();
         if (this.projects[id]) {
-            const tasksToUpdate = taskManager.getTasks(this.projects[id].name);
+            const tasksToUpdate = taskManager.getAllTasks();
             tasksToUpdate.map((task) => {
-                task.belongsTo = newName;
+                if (task.belongsTo == this.projects[id].name) {
+                     task.belongsTo = newName;
+                } 
             })
+            localStorage.setItem('tasks', JSON.stringify(tasksToUpdate));
             console.log(this.projects[id].name, "exist");
             this.projects[id].name = newName;
             localStorage.setItem('projects', JSON.stringify(this.projects));
