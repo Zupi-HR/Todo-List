@@ -8,7 +8,7 @@
     "watch": "webpack --watch",
     "dev": "webpack serve --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    " deploy": "git subtree push --prefix dist origin gh-pages"
+    "deploy-dist": "git add dist && git commit -m 'Initial dist subtree commit' && git subtree push --prefix dist origin gh-pages"
   },
   "keywords": [],
   "author": "",
