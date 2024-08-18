@@ -1,1 +1,68 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Todo List</title><script defer="defer" src="app.bundle.js"></script></head><body><header><img class="check-logo" src="" alt=""><h1>What<span class="green-letters">ToDo</span></h1></header><nav><ul id="home_ul"><h2>Home</h2><li id="all-tasks"><img class="all-tasks_img" src="" alt=""> All Tasks</li><li id="today"><img class="today_img" src="" alt=""> Today</li><li id="next-7-days"><img class="next-7-days_img" src="" alt=""> Next 7 Days</li><li id="important"><img class="important_img" src="" alt=""> Important</li></ul><ul id="projects_ul"><form id="rename-form" class="hidden" action=""><input id="rename-input" name="rename-input" class=""><div class="rename-buttons"><button id="rename-submit-btn" class="submit_btn">Submit</button> <button id="rename-cancel-btn" class="cancel_btn">Cancel</button></div></form><h2>Projects</h2><ul id="projects-list"></ul></ul><form id="project-form" class="hidden" action=""><img class="density-icon" src="" alt=""><div class="input_container"><input id="project_input" placeholder="Enter Project Name"><div class="form_buttons"><button type="submit" id="submit-btn" class="submit_btn" value="add">Add</button> <button type="button" id="cancel-btn" class="cancel_btn" value="cancel">Cancel</button></div></div></form><button id="add-project"><img class="add-project_icon" src="" alt=""> Add Project</button></nav><main><div id="main-title_container"><h2 id="main-title">No Project Selected</h2></div><div id="todo-task"><form id="editTaskForm" class="hidden" action=""><label for="editTaskTitle">Title:</label> <input id="editTaskTitle" class="task-input-field" name="title" placeholder="What to do?" required> <label for="editTaskDetails">Details(optional):</label> <input id="editTaskDetails" class="task-input-field" name="details" placeholder="eg: I'm just gonna procrastinate, aren't I?"> <label for="editTaskDate">Date:</label> <input type="date" id="editTaskDate" class="task-input-field" name="date" required><div class="editTask-form-buttons"><input type="submit" id="editTask-form-submit" class="task-form-btn" value="Add"> <input type="button" id="editTask-form-cancel" class="task-form-btn" value="Cancel"></div></form><ul class="TaskItemsContainer"></ul><form id="task-form" class="hidden" action=""><label for="title">Title:</label> <input id="title" class="task-input-field" name="title" placeholder="What to do?" required> <label for="details">Details(optional):</label> <input id="details" class="task-input-field" name="details" placeholder="eg: I'm just gonna procrastinate, aren't I?"> <label for="date">Date:</label> <input type="date" id="date" class="task-input-field" required><div class="task-form-buttons"><input type="submit" id="task-form-submit" class="task-form-btn" value="Add"> <input type="button" id="task-form-cancel" class="task-form-btn" value="Cancel"></div></form><button id="add-task" class="hidden"><img class="add-project_icon" alt=""> Add Task</button></div></main></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Todo List</title>
+    <script defer="defer" src="app.bundle.js"></script>
+</head>
+
+<body>
+    <header><img class="check-logo" src="" alt="">
+        <h1>What<span class="green-letters">ToDo</span></h1>
+    </header>
+    <nav>
+        <ul id="home_ul">
+            <h2>Home</h2>
+            <li id="all-tasks"><img class="all-tasks_img" src="" alt=""> All Tasks</li>
+            <li id="today"><img class="today_img" src="" alt=""> Today</li>
+            <li id="next-7-days"><img class="next-7-days_img" src="" alt=""> Next 7 Days</li>
+            <li id="important"><img class="important_img" src="" alt=""> Important</li>
+        </ul>
+        <ul id="projects_ul">
+            <form id="rename-form" class="hidden" action=""><input id="rename-input" name="rename-input" class="">
+                <div class="rename-buttons"><button id="rename-submit-btn" class="submit_btn">Submit</button> <button
+                        id="rename-cancel-btn" class="cancel_btn">Cancel</button></div>
+            </form>
+            <h2>Projects</h2>
+            <ul id="projects-list"></ul>
+        </ul>
+        <form id="project-form" class="hidden" action=""><img class="density-icon" src="" alt="">
+            <div class="input_container"><input id="project_input" placeholder="Enter Project Name">
+                <div class="form_buttons"><button type="submit" id="submit-btn" class="submit_btn"
+                        value="add">Add</button> <button type="button" id="cancel-btn" class="cancel_btn"
+                        value="cancel">Cancel</button></div>
+            </div>
+        </form><button id="add-project"><img class="add-project_icon" src="" alt=""> Add Project</button>
+    </nav>
+    <main>
+        <div id="main-title_container">
+            <h2 id="main-title">No Project Selected</h2>
+        </div>
+        <div id="todo-task">
+            <form id="editTaskForm" class="hidden" action=""><label for="editTaskTitle">Title:</label> <input
+                    id="editTaskTitle" class="task-input-field" name="title" placeholder="What to do?" required> <label
+                    for="editTaskDetails">Details(optional):</label> <input id="editTaskDetails"
+                    class="task-input-field" name="details" placeholder="eg: I'm just gonna procrastinate, aren't I?">
+                <label for="editTaskDate">Date:</label> <input type="date" id="editTaskDate" class="task-input-field"
+                    name="date" required>
+                <div class="editTask-form-buttons"><input type="submit" id="editTask-form-submit" class="task-form-btn"
+                        value="Add"> <input type="button" id="editTask-form-cancel" class="task-form-btn"
+                        value="Cancel"></div>
+            </form>
+            <ul class="TaskItemsContainer"></ul>
+            <form id="task-form" class="hidden" action=""><label for="title">Title:</label> <input id="title"
+                    class="task-input-field" name="title" placeholder="What to do?" required> <label
+                    for="details">Details(optional):</label> <input id="details" class="task-input-field" name="details"
+                    placeholder="eg: I'm just gonna procrastinate, aren't I?"> <label for="date">Date:</label> <input
+                    type="date" id="date" class="task-input-field" required>
+                <div class="task-form-buttons"><input type="submit" id="task-form-submit" class="task-form-btn"
+                        value="Add"> <input type="button" id="task-form-cancel" class="task-form-btn" value="Cancel">
+                </div>
+            </form><button id="add-task" class="hidden"><img class="add-project_icon" alt=""> Add Task</button>
+        </div>
+    </main>
+</body>
+
+</html>
