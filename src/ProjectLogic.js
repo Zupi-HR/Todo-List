@@ -35,7 +35,7 @@ class ProjectManager {
     removeProjectById(id, belongsTo) { 
         this.projects = this.getProjects();
         if (this.projects[id]) {
-            console.log(`ID of item that will be deleted: ${id}`);
+            console.log(`ID of item that will be deleted:: ${id}`);
             this.projects.splice(id, 1);
             taskManager.deleteAllTasksInTodo(belongsTo);
             this.refreshProjectIDs();
