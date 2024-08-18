@@ -9,6 +9,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Production',
       template: './src/index.html',
+      minify: {
+        removeRedundantAttributes: false, // Do not remove default attributes
+      },
     }),
   ],
   output: {
