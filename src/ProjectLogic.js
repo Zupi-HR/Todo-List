@@ -32,7 +32,7 @@ class ProjectManager {
 
     }
 
-    removeProjectById(id, belongsTo) {
+    removeProjectById(id, belongsTo) { 
         this.projects = this.getProjects();
         if (this.projects[id]) {
             console.log(`ID of item that will be deleted ${id}`);
