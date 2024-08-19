@@ -443,7 +443,7 @@ function renderTaskItem() {
     const inputDetails = document.getElementById('details').value;
     const inputDate = document.getElementById('date').value;
     const currentProject = document.querySelector(`[data-project="${taskForm.getAttribute('belongs_to')}"]`);
-    const belongsTo = currentProject.querySelector('p').textContent;
+    const belongsTo = currentProject.getAttribute('data-project');
     console.log(belongsTo);
     const tasksArray = taskManager.createTask(belongsTo, inputTitle, inputDetails, inputDate);
     tasksArray.forEach((taskItemElement) => {
@@ -471,7 +471,7 @@ function renderProjectTasks(event) {
     event.stopPropagation();
     const projectID = parseInt(event.currentTarget.getAttribute('data-project'));
     mainTitle.textContent = event.currentTarget.querySelector('p').textContent;
-    displayTasksList(event.currentTarget.querySelector('p').textContent);
+    displayTasksList(event.currentTarget.getAttribute('data-project'));
     addTaskBtn.setAttribute('belongs_to', projectID);
     addTaskBtn.classList.remove('hidden');
 }

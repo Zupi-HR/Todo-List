@@ -180,7 +180,7 @@ function handleProjectFormSubmission(event) {
     event.preventDefault();
     projectsList.innerHTML = "";
     const projects = projectManager.addProject(projectFormInput.value);
-    console.log(projects);
+    console.log(projects, projectFormInput);
 
     createAndRenderProjects(projects);
     projectFormInput.value = "";
@@ -197,6 +197,7 @@ function handleProjectFormCancel(event) {
 
 function createAndRenderProjects(projects) {
     domElements = [];
+    console.log('projects',projects);
     projects.forEach(({ id, name }) => {
         const newFactory = new ProjectElementFactory(id, name);
         domElements.push(newFactory.createProjectElement());

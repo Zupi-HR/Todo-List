@@ -51,8 +51,11 @@ class ProjectManager {
     }
 
     refreshProjectIDs() {
-        this.projects = this.projects.map((item, index) => (item.id = index, item));
-    }
+    this.projects.forEach((item, index) => {
+        item.id = index; // Reassigning IDs based on array index
+        
+    });
+}
 
 }
 
@@ -66,6 +69,5 @@ class ProjectItem {
 
 const projectManager = new ProjectManager();
 export { projectManager };
-
 
 
